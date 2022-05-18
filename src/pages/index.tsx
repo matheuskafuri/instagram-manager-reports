@@ -10,6 +10,7 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import "../styles/Home.module.css";
 import { Insights } from "../types/insights";
+import { translation } from "../utility/translation";
 import { Chart } from "./components/Chart";
 import FacebookLoginButton from "./components/FacebookLoginButton";
 import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
@@ -21,13 +22,13 @@ const sum = (values: number[]) => {
 const columns: GridColDef[] = [
   {
     field: "name",
-    headerName: "Metric",
+    headerName: "Métrica",
     width: 200,
     valueGetter: (params: GridValueGetterParams) => params.row.title,
   },
   {
     field: "period",
-    headerName: "Period",
+    headerName: "Periodo",
     width: 280,
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.values[0].end_time} - ${
@@ -36,7 +37,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "values",
-    headerName: "Value",
+    headerName: "Valores",
     width: 200,
     valueGetter: (params: GridValueGetterParams) => {
       let newValue: number[] = [];
@@ -79,7 +80,7 @@ const Home: NextPage = () => {
               onCellDoubleClick={(data) => {
                 setChartData(data.row);
               }}
-              // localeText={{ checkboxSelectionHeaderName: "Selecionar" }}
+              localeText={translation.ptBR}
             />
             <Chart data={chartData} />
           </>
