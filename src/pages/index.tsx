@@ -81,6 +81,7 @@ const Home: NextPage = () => {
                 setChartData(data.row);
               }}
               localeText={translation.ptBR}
+              disableSelectionOnClick
             />
             <Chart data={chartData} />
           </>
