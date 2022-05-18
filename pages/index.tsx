@@ -9,20 +9,10 @@ import {
 import type { NextPage } from "next";
 import { useState } from "react";
 import "../styles/Home.module.css";
-import Chart from "./components/Chart";
+import { Insights } from "../types/insights";
+import { Chart } from "./components/Chart";
 import FacebookLoginButton from "./components/FacebookLoginButton";
 import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
-
-type Insights = {
-  name: string;
-  period: string;
-  values: Array<{
-    value: number;
-    end_time: string;
-  }>;
-  title: string;
-  description: string;
-};
 
 const sum = (values: number[]) => {
   return values.reduce((acc, value) => acc + value, 0);
@@ -59,6 +49,7 @@ const columns: GridColDef[] = [
 const Home: NextPage = () => {
   const [login, setLogin] = useState(false);
   const [data, setData] = useState<Insights[]>([]);
+  const [chartData, setChartData] = useState<Insights>({} as Insights);
 
   return (
     <div>
@@ -85,8 +76,12 @@ const Home: NextPage = () => {
               checkboxSelection
               getRowId={(row) => row.name}
               components={{ Toolbar: GridToolbar }}
+              onCellDoubleClick={(data) => {
+                setChartData(data.row);
+              }}
+              // localeText={{ checkboxSelectionHeaderName: "Selecionar" }}
             />
-            <Chart />
+            <Chart data={chartData} />
           </>
         )}
       </div>
