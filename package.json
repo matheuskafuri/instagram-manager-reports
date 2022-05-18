@@ -24,7 +24,8 @@
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-facebook-login": "^4.1.1",
-    "react-icons": "^4.3.1"
+    "react-icons": "^4.3.1",
+    "recharts": "^2.1.9"
   },
   "devDependencies": {
     "@types/mui-datatables": "^3.7.9",

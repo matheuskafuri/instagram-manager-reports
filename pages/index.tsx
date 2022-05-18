@@ -9,6 +9,7 @@ import {
 import type { NextPage } from "next";
 import { useState } from "react";
 import "../styles/Home.module.css";
+import Chart from "./components/Chart";
 import FacebookLoginButton from "./components/FacebookLoginButton";
 import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
 
@@ -23,6 +24,10 @@ type Insights = {
   description: string;
 };
 
+const sum = (values: number[]) => {
+  return values.reduce((acc, value) => acc + value, 0);
+};
+
 const columns: GridColDef[] = [
   {
     field: "name",
@@ -35,14 +40,19 @@ const columns: GridColDef[] = [
     headerName: "Period",
     width: 280,
     valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.values[0].end_time} - ${params.row.values[1].end_time}`,
+      `${params.row.values[0].end_time} - ${
+        params.row.values[params.row.values.length - 1].end_time
+      }`,
   },
   {
     field: "values",
     headerName: "Value",
     width: 200,
-    valueGetter: (params: GridValueGetterParams) =>
-      params.row.values[0].value + params.row.values[1].value,
+    valueGetter: (params: GridValueGetterParams) => {
+      let newValue: number[] = [];
+      params.row.values.forEach((item: any) => newValue.push(item.value));
+      return sum(newValue);
+    },
   },
 ];
 
@@ -66,15 +76,18 @@ const Home: NextPage = () => {
       </div>
       <div style={{ height: 400, width: "100%" }}>
         {login && (
-          <DataGrid
-            columns={columns}
-            rows={data}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
-            getRowId={(row) => row.name}
-            components={{ Toolbar: GridToolbar }}
-          />
+          <>
+            <DataGrid
+              columns={columns}
+              rows={data}
+              pageSize={5}
+              rowsPerPageOptions={[5]}
+              checkboxSelection
+              getRowId={(row) => row.name}
+              components={{ Toolbar: GridToolbar }}
+            />
+            <Chart />
+          </>
         )}
       </div>
     </div>

@@ -78,9 +78,14 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const todayAsUnixTimestamp = new Date().getTime() / 1000;
+    const initialDateUnixTimestamp =
+      todayAsUnixTimestamp - 86400 * 30; /* 30 days */
+    const since = initialDateUnixTimestamp.toFixed(0);
+    const until = todayAsUnixTimestamp.toFixed(0);
     try {
       const response = await api.get(
-        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cfollower_count%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&access_token=${user?.accessToken}`
+        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cfollower_count%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
       );
       const data = response.data.data;
       const insights = data.map((item: any) => {
