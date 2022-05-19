@@ -1,6 +1,5 @@
-import * as React from "react";
+import React, { FormEvent, useState, MouseEvent } from "react";
 import { useUserContext } from "../../context/user";
-import { FormEvent, useState } from "react";
 import api from "../../services/api";
 
 import { styled, alpha } from "@mui/material/styles";
@@ -16,7 +15,11 @@ import {
   Badge,
   Menu,
   MenuItem,
+  TextField,
 } from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -38,6 +41,27 @@ const Search = styled("div")(({ theme }) => ({
     marginLeft: theme.spacing(3),
     width: "auto",
   },
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+}));
+
+const DateSearch = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    width: "auto",
+  },
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -75,14 +99,45 @@ const dateFormatter = (date: string) => {
 const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
   const { user } = useUserContext();
   const [search, setSearch] = useState("");
+  const [initialDate, setInitialDate] = useState<Date | null>(new Date());
+  const [finalDate, setFinalDate] = useState<Date | null>(new Date());
+
+  const handleInitialDate = (newValue: Date | null) => {
+    if (null) {
+      setInitialDate(new Date());
+    }
+    setInitialDate(newValue);
+  };
+
+  const handleFinalDate = (newValue: Date | null) => {
+    if (null) {
+      setFinalDate(new Date());
+    }
+    setFinalDate(newValue);
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const todayAsUnixTimestamp = new Date().getTime() / 1000;
-    const initialDateUnixTimestamp =
-      todayAsUnixTimestamp - 86400 * 30; /* 30 days */
+    if (!search) {
+      alert("Por favor, preencha o campo de busca");
+      return;
+    }
+
+    const finalDateAsUnixTimestamp = finalDate
+      ? finalDate.getTime() / 1000
+      : new Date().getTime() / 1000;
+    const initialDateUnixTimestamp = initialDate
+      ? initialDate.getTime() / 1000
+      : finalDateAsUnixTimestamp - 86400 * 30;
+
+    if (finalDateAsUnixTimestamp - initialDateUnixTimestamp > 30 * 86400) {
+      alert("Período máximo de 30 dias");
+      return;
+    }
+
     const since = initialDateUnixTimestamp.toFixed(0);
-    const until = todayAsUnixTimestamp.toFixed(0);
+    const until = finalDateAsUnixTimestamp.toFixed(0);
+
     try {
       const response = await api.get(
         `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cfollower_count%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
@@ -108,14 +163,14 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
       console.log(error);
     }
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
+    useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -128,7 +183,7 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMobileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
@@ -237,20 +292,40 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Procurar…"
                 inputProps={{ "aria-label": "search" }}
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
               />
             </Search>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DateSearch>
+                <DesktopDatePicker
+                  inputFormat="dd/MM/yyyy"
+                  minDate={new Date("2020-01-01")}
+                  value={initialDate}
+                  onChange={handleInitialDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </DateSearch>
+              <DateSearch>
+                <DesktopDatePicker
+                  inputFormat="dd/MM/yyyy"
+                  minDate={new Date("2020-01-01")}
+                  value={finalDate}
+                  onChange={handleFinalDate}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </DateSearch>
+            </LocalizationProvider>
             <Button
               color="inherit"
               size="small"
               variant="outlined"
               type="submit"
             >
-              GO
+              Buscar
             </Button>
           </Box>
           <Box sx={{ flexGrow: 1 }} />

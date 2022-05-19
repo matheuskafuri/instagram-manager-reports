@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
   const [chartData, setChartData] = useState<Insights>({} as Insights);
 
   return (
-    <div>
+    <Box>
       <Typography
         variant="h1"
         style={{ fontSize: "32px", fontWeight: "bold" }}
@@ -62,11 +62,18 @@ const Home: NextPage = () => {
       >
         Dashboard
       </Typography>
-      <div style={{ width: "100%" }}>
+      <Box style={{ width: "100%" }}>
         {!login && <FacebookLoginButton handleLoginState={setLogin} />}
         {login && <PrimarySearchAppBar handleSetData={setData} />}
-      </div>
-      <div style={{ height: 400, width: "100%" }}>
+      </Box>
+      <Box
+        sx={{
+          height: 400,
+          maxWidth: "1180px",
+          margin: "0 auto",
+          mt: "32px",
+        }}
+      >
         {login && (
           <>
             <DataGrid
@@ -82,12 +89,13 @@ const Home: NextPage = () => {
               }}
               localeText={translation.ptBR}
               disableSelectionOnClick
+              sx={{ mb: "32px" }}
             />
             <Chart data={chartData} />
           </>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
