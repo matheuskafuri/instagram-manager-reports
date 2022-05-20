@@ -20,12 +20,13 @@ import {
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+
+import { TemporaryDrawer } from "./Drawer";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -143,6 +144,7 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
         `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cfollower_count%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
       );
       const data = response.data.data;
+      console.log(data);
       const insights = data.map((item: any) => {
         const values = item.values.map((value: any) => {
           return {
@@ -265,15 +267,7 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <TemporaryDrawer />
           <Typography
             variant="h6"
             noWrap

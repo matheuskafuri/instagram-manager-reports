@@ -11,11 +11,6 @@ import {
 import Title from "./Title";
 import { Insights } from "../../types/insights";
 
-// Generate Sales Data
-function createData(time: string, amount?: number) {
-  return { time, amount };
-}
-
 type ChartProps = {
   data: Insights;
 };
@@ -31,11 +26,10 @@ const Chart = ({ data }: ChartProps) => {
       });
     });
   }
-  console.log(chartData);
 
   return (
     <>
-      <Title>Last 30 Days</Title>
+      <Title>{data.title}</Title>
       <ResponsiveContainer>
         <LineChart
           data={chartData}

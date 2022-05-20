@@ -1,19 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Typography } from "@mui/material";
+import { useState } from "react";
+import type { NextPage } from "next";
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
   GridToolbar,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import type { NextPage } from "next";
-import { useState } from "react";
-import "../styles/Home.module.css";
 import { Insights } from "../types/insights";
 import { translation } from "../utility/translation";
 import { Chart } from "./components/Chart";
 import FacebookLoginButton from "./components/FacebookLoginButton";
 import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
+import { Header } from "./components/Header";
+
+import "../styles/Home.module.css";
 
 const sum = (values: number[]) => {
   return values.reduce((acc, value) => acc + value, 0);
@@ -52,48 +54,81 @@ const Home: NextPage = () => {
   const [data, setData] = useState<Insights[]>([]);
   const [chartData, setChartData] = useState<Insights>({} as Insights);
 
-  return (
-    <Box>
-      <Typography
-        variant="h1"
-        style={{ fontSize: "32px", fontWeight: "bold" }}
-        align="center"
-        color="primary"
-      >
-        Dashboard
-      </Typography>
-      <Box style={{ width: "100%" }}>
-        {!login && <FacebookLoginButton handleLoginState={setLogin} />}
-        {login && <PrimarySearchAppBar handleSetData={setData} />}
+  if (!login) {
+    return (
+      <Box sx={{ maxWidth: "300px" }}>
+        <FacebookLoginButton handleLoginState={setLogin} />
       </Box>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Header />
+      <PrimarySearchAppBar handleSetData={setData} />
       <Box
+        component="main"
         sx={{
-          height: 400,
-          maxWidth: "1180px",
-          margin: "0 auto",
-          mt: "32px",
+          flexGrow: 1,
+          height: "100vh",
+          overflow: "auto",
+          mt: 2,
         }}
       >
-        {login && (
-          <>
-            <DataGrid
-              columns={columns}
-              rows={data}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-              getRowId={(row) => row.name}
-              components={{ Toolbar: GridToolbar }}
-              onCellDoubleClick={(data) => {
-                setChartData(data.row);
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Grid container>
+            <Grid item xs={12}>
+              <Paper
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: 440,
+                }}
+              >
+                <DataGrid
+                  columns={columns}
+                  rows={data}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  checkboxSelection
+                  getRowId={(row) => row.name}
+                  components={{ Toolbar: GridToolbar }}
+                  onCellDoubleClick={(data) => {
+                    setChartData(data.row);
+                  }}
+                  localeText={translation.ptBR}
+                  disableSelectionOnClick
+                />
+              </Paper>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={8}
+              lg={9}
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: 440,
+                borderRadius: "5px",
+                backgroundColor: "#fff",
+                border: "1px solid #e0e0e0",
+                mt: 2,
+                alignItems: "center",
               }}
-              localeText={translation.ptBR}
-              disableSelectionOnClick
-              sx={{ mb: "32px" }}
-            />
-            <Chart data={chartData} />
-          </>
-        )}
+            >
+              <Chart data={chartData} />
+            </Grid>
+          </Grid>
+        </Container>
       </Box>
     </Box>
   );
