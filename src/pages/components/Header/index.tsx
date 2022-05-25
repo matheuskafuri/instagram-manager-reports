@@ -1,7 +1,11 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { ReactNode } from "react";
 
-const Header = () => {
+type HeaderProps = {
+  children?: ReactNode;
+};
+
+const Header = ({ children }: HeaderProps) => {
   return (
     <Typography
       variant="h1"
@@ -9,7 +13,7 @@ const Header = () => {
       align="center"
       color="primary"
     >
-      Dashboard
+      {children}
     </Typography>
   );
 };

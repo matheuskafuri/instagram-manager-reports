@@ -1,23 +1,41 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import { Header } from "../Header";
+import { useRouter } from "next/router";
+import { Insights } from "../../../types/insights";
+import { useInsightsContext } from "../../../context/insights";
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import { IconButton, Toolbar } from "@mui/material";
+import { deepOrange, lightBlue } from "@mui/material/colors";
 
-const TemporaryDrawer = () => {
+type TemporaryDrawerProps = {
+  handleInsightSelection: (insight: Insights | undefined) => void;
+};
+
+const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
   const [state, setState] = useState(false);
+  const { insights } = useInsightsContext();
+  const router = useRouter();
 
   const handleSelect = (text: string) => {
-    console.log(text);
+    if (text === "Todos Insights") {
+      handleInsightSelection(undefined);
+    }
+    const insight = insights?.find((item: any) => item.title === text);
+    handleInsightSelection(insight);
+    setState(false);
   };
 
   const toggleDrawer =
@@ -32,7 +50,7 @@ const TemporaryDrawer = () => {
       setState(open);
     };
   return (
-    <div>
+    <Toolbar>
       <IconButton
         size="large"
         edge="start"
@@ -52,6 +70,7 @@ const TemporaryDrawer = () => {
         >
           <List>
             {[
+              "Todos Insights",
               "Alcance",
               "Impressões",
               "Visualizações do perfil",
@@ -60,7 +79,11 @@ const TemporaryDrawer = () => {
               <ListItem key={text} disablePadding>
                 <ListItemButton onClick={() => handleSelect(text)}>
                   <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {index % 2 === 0 ? (
+                      <InboxIcon sx={{ color: deepOrange[500] }} />
+                    ) : (
+                      <MailIcon sx={{ color: lightBlue[800] }} />
+                    )}
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
@@ -78,16 +101,33 @@ const TemporaryDrawer = () => {
               <ListItem key={text} disablePadding>
                 <ListItemButton onClick={() => handleSelect(text)}>
                   <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {index % 2 === 0 ? (
+                      <InboxIcon sx={{ color: lightBlue[800] }} />
+                    ) : (
+                      <MailIcon sx={{ color: deepOrange[500] }} />
+                    )}
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
             ))}
+            <ListItem disablePadding sx={{ backgroundColor: lightBlue[50] }}>
+              <ListItemButton
+                onClick={() => {
+                  router.push("/followers-count");
+                }}
+              >
+                <ListItemIcon>
+                  <StarIcon sx={{ color: lightBlue[800] }} />
+                </ListItemIcon>
+                <ListItemText primary="Análise de Seguidores" />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Box>
       </Drawer>
-    </div>
+      <Header>Dashboard</Header>
+    </Toolbar>
   );
 };
 

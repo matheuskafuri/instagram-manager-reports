@@ -7,29 +7,35 @@ import {
   YAxis,
   Label,
   ResponsiveContainer,
+  Tooltip,
+  CartesianGrid,
 } from "recharts";
-import Title from "./Title";
-import { Insights } from "../../types/insights";
 
-type ChartProps = {
+import { Insights } from "../../../types/insights";
+import Title from "../Title";
+
+type AccumulatedChartProps = {
   data: Insights;
+  title?: string;
 };
-const Chart = ({ data }: ChartProps) => {
+const AccumulatedChart = ({ data, title }: AccumulatedChartProps) => {
   const theme = useTheme();
 
   let chartData: any[] = [];
   if (data.values) {
-    data.values.forEach((item: any) => {
+    data.values.forEach((item: any, index) => {
       chartData.push({
         time: item.end_time,
-        amount: item.value,
+        amount: item.value + (index > 0 ? chartData[index - 1].amount : 0),
       });
     });
   }
 
+  console.log(chartData);
+
   return (
     <>
-      <Title>{data.title}</Title>
+      <Title>{title ? title : data.title}</Title>
       <ResponsiveContainer>
         <LineChart
           data={chartData}
@@ -40,6 +46,7 @@ const Chart = ({ data }: ChartProps) => {
             left: 24,
           }}
         >
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="time"
             stroke={theme.palette.text.secondary}
@@ -68,10 +75,11 @@ const Chart = ({ data }: ChartProps) => {
             stroke={theme.palette.primary.main}
             dot={false}
           />
+          <Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </>
   );
 };
 
-export { Chart };
+export { AccumulatedChart };

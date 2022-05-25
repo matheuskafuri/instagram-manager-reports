@@ -1,6 +1,9 @@
 import React, { FormEvent, useState, MouseEvent } from "react";
-import { useUserContext } from "../../context/user";
-import api from "../../services/api";
+import { useInsightsContext } from "../../../context/insights";
+import { useAuthContext } from "../../../context/auth";
+import { useSearchContext } from "../../../context/search";
+
+import api from "../../../services/api";
 
 import { styled, alpha } from "@mui/material/styles";
 import {
@@ -25,8 +28,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-
-import { TemporaryDrawer } from "./Drawer";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -89,17 +90,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-type PrimarySearchAppBarProps = {
-  handleSetData: (data: any) => void;
-};
-
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
 };
 
-const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
-  const { user } = useUserContext();
-  const [search, setSearch] = useState("");
+const PrimarySearchAppBar = () => {
+  const { user } = useAuthContext();
+  const { setInsights } = useInsightsContext();
+  const { search, setSearch } = useSearchContext();
+
   const [initialDate, setInitialDate] = useState<Date | null>(new Date());
   const [finalDate, setFinalDate] = useState<Date | null>(new Date());
 
@@ -141,10 +140,9 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
 
     try {
       const response = await api.get(
-        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cfollower_count%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
+        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
       );
       const data = response.data.data;
-      console.log(data);
       const insights = data.map((item: any) => {
         const values = item.values.map((value: any) => {
           return {
@@ -160,11 +158,13 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
           description: item.description,
         };
       });
-      handleSetData(insights);
+      setInsights(insights);
     } catch (error) {
       console.log(error);
     }
   };
+
+  // mobile menu logic
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -267,7 +267,6 @@ const PrimarySearchAppBar = ({ handleSetData }: PrimarySearchAppBarProps) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <TemporaryDrawer />
           <Typography
             variant="h6"
             noWrap
