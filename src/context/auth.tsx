@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "../types/user";
 
 import { getApps, initializeApp } from "firebase/app";
@@ -84,6 +84,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         setUser(user);
         handleCookies(accessToken);
+        router.push("/dashboard");
       })
       .catch((error) => {
         const errorCode = error.code;

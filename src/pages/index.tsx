@@ -1,58 +1,59 @@
-/* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
-
-import { Insights } from "../types/insights";
-import { InsightTable } from "./components/InsightTable";
-import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
-import { TemporaryDrawer } from "./components/Drawer";
-import { InsightsSummary } from "./components/InsigthsSummary";
-
-import { Box, Button } from "@mui/material";
-
-import "../styles/Home.module.css";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useAuthContext } from "../context/auth";
 
-function Home() {
-  const [selectedInsight, setSelectedInsight] = useState<Insights>();
-  const { signInWithFacebook, user } = useAuthContext();
+import { Stack, LinearProgress, Container } from "@mui/material";
+import { deepOrange, lightBlue } from "@mui/material/colors";
+import AutoModeTwoToneIcon from "@mui/icons-material/AutoModeTwoTone";
 
-  if (!user) {
-    return (
-      <Box sx={{ maxWidth: "300px" }}>
-        <Button onClick={signInWithFacebook}>Login</Button>
-      </Box>
-    );
-  }
+const Home = () => {
+  const { user } = useAuthContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, []);
 
   return (
-    <Box
+    <Container
+      component="main"
+      maxWidth="xl"
       sx={{
         display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         flexDirection: "column",
-        backgroundColor: "#f5f5f5",
+        height: "100vh",
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
-        <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
-        <PrimarySearchAppBar />
-      </Box>
-      <Box
-        component="main"
+      <AutoModeTwoToneIcon
         sx={{
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-          mt: 2,
+          color: lightBlue[800],
+          width: 120,
+          height: 120,
+          m: 2,
         }}
+      />
+      <Stack
+        sx={{
+          width: "100%",
+          color: deepOrange[500],
+        }}
+        spacing={2}
       >
-        {selectedInsight ? (
-          <InsightTable insight={selectedInsight} />
-        ) : (
-          <InsightsSummary />
-        )}
-      </Box>
-    </Box>
+        <LinearProgress color="primary" />
+        <LinearProgress color="inherit" />
+        <LinearProgress color="primary" />
+        <LinearProgress color="inherit" />
+      </Stack>
+    </Container>
   );
-}
+};
 
 export default Home;

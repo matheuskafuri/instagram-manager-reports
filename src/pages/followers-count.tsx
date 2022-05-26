@@ -4,8 +4,8 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 
 import { useSearchContext } from "../context/search";
+import { useAuthContext } from "../context/auth";
 import { Insights } from "../types/insights";
-import { InsightTable } from "./components/InsightTable";
 import { GoBackButton } from "./components/GoBackButton";
 import { Box } from "@mui/material";
 
@@ -13,6 +13,7 @@ import api from "../services/api";
 import { useRouter } from "next/router";
 import { FollowersReport } from "./components/FollowersReport";
 import { Header } from "./components/Header";
+import { SecondarySearchAppBar } from "./components/SecondarySearchAppBar";
 
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
@@ -23,6 +24,7 @@ const FollowerCount = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [followerCount, setFollowerCount] = useState<Insights>();
   const { search } = useSearchContext();
+  const { user } = useAuthContext();
   const router = useRouter();
 
   const followerCountReport = async (search: string) => {
@@ -80,6 +82,7 @@ const FollowerCount = ({
         <GoBackButton />
         <Header>Análise de Seguidores dos últimos 30 dias</Header>
       </Box>
+      {/* <SecondarySearchAppBar /> */}
       <Box
         component="main"
         sx={{

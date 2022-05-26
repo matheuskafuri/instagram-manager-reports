@@ -11,6 +11,7 @@ import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
 import { Chart } from "../Chart";
 import { AreaModelChart } from "../Chart/AreaChart";
+import { AuxiliarPanel } from "../AuxiliarPanel";
 
 const columns: GridColDef[] = [
   {
@@ -93,6 +94,20 @@ const InsightTable = ({ insight }: InsightTable) => {
           }}
         >
           <AreaModelChart data={chartData} />
+        </Grid>
+        <Grid item xs={12} md={4} lg={3} sx={{ flexGrow: 1 }}>
+          <Paper
+            sx={{
+              p: 2,
+              mt: 2,
+              ml: 2,
+              display: "flex",
+              flexDirection: "column",
+              height: 240,
+            }}
+          >
+            <AuxiliarPanel data={chartData} />
+          </Paper>
         </Grid>
       </Grid>
     </Container>
