@@ -14,19 +14,24 @@ type AuxiliarPanelProps = {
 
 const AuxiliarPanel = ({ title, data }: AuxiliarPanelProps) => {
   const panelDataTotalValue = data.values
-    .map((item: any) => item.value)
-    .reduce(
-      (accumulator: number, currentValue: number) => accumulator + currentValue,
-      0
-    );
+    ? data.values
+        .map((item: any) => item.value)
+        .reduce(
+          (accumulator: number, currentValue: number) =>
+            accumulator + currentValue,
+          0
+        )
+    : 0;
 
   const panelDataTotalValueFormatted = new Intl.NumberFormat(
     "pt-BR",
     {}
   ).format(panelDataTotalValue);
-  const panelDataInitialDate = data.values[0].end_time;
-  const panelDataFinalDate = data.values[data.values.length - 1].end_time;
-  const description = data.description;
+  const panelDataInitialDate = data.values ? data.values[0].end_time : "";
+  const panelDataFinalDate = data.values
+    ? data.values[data.values.length - 1].end_time
+    : "";
+  const description = data ? data.description : "";
 
   return (
     <>
@@ -34,9 +39,11 @@ const AuxiliarPanel = ({ title, data }: AuxiliarPanelProps) => {
       <Typography component="p" variant="h4">
         Total: {panelDataTotalValueFormatted}
       </Typography>
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
-        De {panelDataInitialDate} Até {panelDataFinalDate}
-      </Typography>
+      {data.values ? (
+        <Typography color="text.secondary" sx={{ flex: 1 }}>
+          De {panelDataInitialDate} Até {panelDataFinalDate}
+        </Typography>
+      ) : null}
       <Typography color="text.secondary" sx={{ flex: 1 }}>
         {description}
       </Typography>

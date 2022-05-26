@@ -82,7 +82,7 @@ const FollowerCount = ({
         <GoBackButton />
         <Header>Análise de Seguidores dos últimos 30 dias</Header>
       </Box>
-      {/* <SecondarySearchAppBar /> */}
+      <SecondarySearchAppBar />
       <Box
         component="main"
         sx={{

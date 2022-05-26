@@ -4,6 +4,13 @@ import { User } from "../types/user";
 import { getApps, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { FacebookAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useRouter } from "next/router";
 
@@ -28,6 +35,7 @@ if (!getApps.length) {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const db = getFirestore(app);
 
 type AuthContextData = {
   user: User | null;
@@ -69,7 +77,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     );
 
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
+        // Create a document inside the users collection with the name of the uid of the user
+        try {
+          await setDoc(doc(db, "users", result.user.uid), {
+            uid: result.user.uid,
+            email: result.user.email,
+            name: result.user.displayName,
+            provider: result.user.providerData[0].providerId,
+            photoUrl: result.user.photoURL,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential?.accessToken;
