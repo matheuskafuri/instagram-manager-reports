@@ -12,6 +12,8 @@ import { Box, Button } from "@mui/material";
 import "../styles/Home.module.css";
 import { useAuthContext } from "../context/auth";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 function Dashboard() {
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
@@ -22,7 +24,7 @@ function Dashboard() {
     if (!user) {
       router.push("/login");
     }
-  }, []);
+  }, [router, user]);
 
   return (
     <Box
@@ -54,5 +56,20 @@ function Dashboard() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { accessToken } = parseCookies(ctx);
+
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { accessToken } };
+};
 
 export default Dashboard;

@@ -52,7 +52,6 @@ const FollowerCount = ({
         }),
       };
       setFollowerCount(insights);
-      console.log(insights);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +62,7 @@ const FollowerCount = ({
       alert(
         "Por favor, insira um código de conta válido no campo de pesquisa."
       );
-      router.push("/");
+      router.push("/dashboard");
     }
     followerCountReport(search);
   }, []);
@@ -104,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!accessToken) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/dashboard",
         permanent: false,
       },
     };

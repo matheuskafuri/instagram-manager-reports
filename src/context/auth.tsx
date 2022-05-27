@@ -74,7 +74,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         setUser(user);
         handleCookies(accessToken);
-        router.push("/dashboard");
+        router.push("/");
       })
       .catch((error) => {
         const errorCode = error.code;
