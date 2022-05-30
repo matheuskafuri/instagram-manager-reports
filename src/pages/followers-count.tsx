@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { FollowersReport } from "./components/FollowersReport";
 import { Header } from "./components/Header";
 import { SecondarySearchAppBar } from "./components/SecondarySearchAppBar";
+import { Copyright } from "./components/Copyright";
 
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
@@ -93,6 +94,7 @@ const FollowerCount = ({
       >
         {followerCount ? <FollowersReport insight={followerCount} /> : null}
       </Box>
+      <Copyright sx={{ mt: 5 }} />
     </Box>
   );
 };

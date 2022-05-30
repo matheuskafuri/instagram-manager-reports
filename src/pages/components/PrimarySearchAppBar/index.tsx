@@ -94,7 +94,11 @@ const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
 };
 
-const PrimarySearchAppBar = () => {
+type PrimarySearchAppBarProps = {
+  accessToken: string;
+};
+
+const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
   const { user } = useAuthContext();
   const { setInsights } = useInsightsContext();
   const { search, setSearch } = useSearchContext();
@@ -140,7 +144,7 @@ const PrimarySearchAppBar = () => {
 
     try {
       const response = await api.get(
-        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${user?.accessToken}`
+        `${search}/insights?metric=reach%2Cimpressions%2Cprofile_views%2Cemail_contacts%2Cget_directions_clicks%2Cphone_call_clicks%2Ctext_message_clicks%2Cwebsite_clicks&period=day&since=${since}&until=${until}&access_token=${accessToken}`
       );
       const data = response.data.data;
       const insights = data.map((item: any) => {

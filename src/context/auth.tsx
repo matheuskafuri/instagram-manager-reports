@@ -1,10 +1,11 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "../types/user";
 import { auth, db } from "../utility/firebase.config";
 import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useRouter } from "next/router";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type AuthContextData = {
   user: User | null;
@@ -21,13 +22,14 @@ const AuthContext = createContext({} as AuthContextData);
 
 const handleCookies = (accessToken: any) => {
   setCookie(null, "accessToken", accessToken, {
-    maxAge: 1000 * 60 * 60 * 24 * 30,
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     path: "/",
   });
 };
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [firebaseUser] = useAuthState(auth);
   const isAuthenticated = !!user;
   const router = useRouter();
 
@@ -85,6 +87,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const credential = FacebookAuthProvider.credentialFromError(error);
       });
   };
+
+  useEffect(() => {
+    if (firebaseUser) {
+      setUser({
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName!,
+        email: firebaseUser.email!,
+        picture: firebaseUser.photoURL!,
+      });
+    }
+  }, [firebaseUser]);
 
   return (
     <AuthContext.Provider
