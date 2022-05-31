@@ -6,12 +6,13 @@ import { doc, setDoc } from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
+import usePremiumStatus from "../../stripe/usePremiumStatus";
+import { createCheckoutSession } from "../../stripe/createCheckoutSession";
 
 type AuthContextData = {
   user: User | null;
   signInWithFacebook: () => void;
   signOut: () => void;
-  isAuthenticated: boolean;
 };
 
 type AuthProviderProps = {
@@ -30,7 +31,6 @@ const handleCookies = (accessToken: any) => {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser] = useAuthState(auth);
-  const isAuthenticated = !!user;
   const router = useRouter();
 
   const signOut = async () => {
@@ -61,7 +61,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } catch (error) {
           console.log(error);
         }
-
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential?.accessToken;
@@ -100,9 +99,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [firebaseUser]);
 
   return (
-    <AuthContext.Provider
-      value={{ user, signInWithFacebook, signOut, isAuthenticated }}
-    >
+    <AuthContext.Provider value={{ user, signInWithFacebook, signOut }}>
       {children}
     </AuthContext.Provider>
   );

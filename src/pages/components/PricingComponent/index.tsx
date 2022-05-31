@@ -58,11 +58,11 @@ const tiers = [
   // },
 ];
 
-type PricingProps = {
+type PricingComponentProps = {
   userUid: string;
 };
 
-const Pricing = ({ userUid }: PricingProps) => {
+const PricingComponent = ({ userUid }: PricingComponentProps) => {
   return (
     <>
       <GlobalStyles
@@ -175,4 +175,4 @@ const Pricing = ({ userUid }: PricingProps) => {
   );
 };
 
-export { Pricing };
+export { PricingComponent };
