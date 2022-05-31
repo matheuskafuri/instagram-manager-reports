@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import StarIcon from "@mui/icons-material/StarBorder";
 import {
   Box,
@@ -17,6 +17,8 @@ import {
 import { Copyright } from "../Copyright";
 import { SiteNavBar } from "../SiteNavBar";
 import { createCheckoutSession } from "../../../../stripe/createCheckoutSession";
+import theme from "../../../styles/theme/lightThemeOptions";
+import { useRouter } from "next/router";
 
 const tiers = [
   {
@@ -63,6 +65,7 @@ type PricingComponentProps = {
 };
 
 const PricingComponent = ({ userUid }: PricingComponentProps) => {
+  const router = useRouter();
   return (
     <>
       <GlobalStyles
@@ -107,20 +110,33 @@ const PricingComponent = ({ userUid }: PricingComponentProps) => {
               sm={tier.title === "Enterprise" ? 12 : 6}
               md={6} //with 3 cards, this is should be 4
             >
-              <Card>
+              <Card
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: theme.shape.borderRadius,
+                  boxShadow: theme.shadows[5],
+                  color: theme.palette.text.primary,
+                }}
+              >
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
-                  titleTypographyProps={{ align: "center" }}
-                  action={tier.title === "Pro" ? <StarIcon /> : null}
+                  titleTypographyProps={{
+                    align: "center",
+                    fontWeight: "bold",
+                    color: "#fafafa",
+                  }}
+                  action={
+                    tier.title === "Pro" ? (
+                      <StarIcon sx={{ color: "#fafafa", fontWeight: "bold" }} />
+                    ) : null
+                  }
                   subheaderTypographyProps={{
                     align: "center",
+                    color: "#fafafa",
                   }}
                   sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? theme.palette.grey[200]
-                        : theme.palette.grey[700],
+                    backgroundColor: theme.palette.secondary.main,
                   }}
                 />
                 <CardContent>
@@ -160,7 +176,11 @@ const PricingComponent = ({ userUid }: PricingComponentProps) => {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as "outlined" | "contained"}
-                    onClick={() => createCheckoutSession(userUid)}
+                    onClick={
+                      tier.title === "Pro"
+                        ? () => createCheckoutSession(userUid)
+                        : () => router.push("/")
+                    }
                   >
                     {tier.buttonText}
                   </Button>

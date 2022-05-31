@@ -2,7 +2,7 @@ import React from "react";
 
 import { Container, Stack, LinearProgress } from "@mui/material";
 import AutoModeTwoToneIcon from "@mui/icons-material/AutoModeTwoTone";
-import { lightBlue, deepOrange } from "@mui/material/colors";
+import theme from "../../../styles/theme/lightThemeOptions";
 
 const Loader = () => {
   return (
@@ -19,7 +19,7 @@ const Loader = () => {
     >
       <AutoModeTwoToneIcon
         sx={{
-          color: lightBlue[800],
+          color: theme.palette.primary.light,
           width: 120,
           height: 120,
           m: 2,
@@ -28,7 +28,7 @@ const Loader = () => {
       <Stack
         sx={{
           width: "100%",
-          color: deepOrange[500],
+          color: theme.palette.secondary.main,
         }}
         spacing={2}
       >
