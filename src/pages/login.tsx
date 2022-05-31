@@ -14,16 +14,12 @@ import {
 } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { useAuthContext } from "../context/auth";
+import { Copyright } from "./components/Copyright";
 
 const Login = () => {
   const { signInWithFacebook } = useAuthContext();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
     signInWithFacebook();
   };
   return (
@@ -57,6 +53,7 @@ const Login = () => {
           </Button>
         </Box>
       </Box>
+      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 };
