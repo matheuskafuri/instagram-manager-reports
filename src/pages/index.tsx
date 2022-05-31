@@ -3,97 +3,69 @@ import { auth } from "../utility/firebase.config";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import { Typography, Button } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Box,
+  Container,
+  Card,
+  Grid,
+  CardHeader,
+  CardContent,
+} from "@mui/material";
 import { Loader } from "./components/Loader";
 import { useAuthContext } from "../context/auth";
+import { Header } from "./components/Header";
+import { FacebookButton } from "./components/SocialLoginButton";
+import theme from "../styles/theme/lightThemeOptions";
+import { AppMenu } from "./components/AppMenu";
+import { Copyright } from "./components/Copyright";
 
 const Home = () => {
   const router = useRouter();
   const [user, userLoading] = useAuthState(auth);
-  const { signOut, signInWithFacebook } = useAuthContext();
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <>
       {!user && userLoading && <Loader />}
 
       {!user && !userLoading && (
-        <div>
-          <Typography variant="h3">Welcome to the Manager Report!</Typography>
+        <Container component="main" maxWidth="sm" sx={{ padding: 4 }}>
+          <Header>Welcome to the Manager Report!</Header>
           {/* Criar fluxograma de registro do usuário */}
-          <Button
+          <Box
             sx={{
-              width: "100%",
-              height: "100%",
-              color: "with",
-              backgroundColor: "royalblue",
-              mt: 3,
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            variant="contained"
-            onClick={() => signInWithFacebook()}
           >
-            Entrar
-          </Button>
-        </div>
+            <FacebookButton />
+          </Box>
+        </Container>
       )}
 
       {user && !userLoading && (
-        <div>
-          <Typography variant="h5">
-            Welcome back, {user.displayName}!
-          </Typography>
-          <Button
+        <Container component="main" maxWidth="xl" sx={{ mb: 4 }}>
+          <Box sx={{ marginTop: 2, display: "flex", alignItems: "flex-start" }}>
+            <Header>Welcome back, {user.displayName}!</Header>
+          </Box>
+          <Box
             sx={{
-              width: "100%",
-              height: "100%",
-              color: "with",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 2,
             }}
-            variant="contained"
-            onClick={() => router.push("/dashboard")}
           >
-            Dashboard
-          </Button>
-          <Button
-            sx={{
-              width: "100%",
-              height: "100%",
-              color: "with",
-              backgroundColor: "darkgoldenrod",
-              mt: 3,
-            }}
-            variant="contained"
-            onClick={() => router.push("/")}
-          >
-            Adicionar uma conta do Instagram
-          </Button>
-          <Button
-            sx={{
-              width: "100%",
-              height: "100%",
-              color: "with",
-              backgroundColor: "darkkhaki",
-              mt: 3,
-            }}
-            variant="contained"
-            onClick={() => router.push("/pricing")}
-          >
-            Upgrade to Premium
-          </Button>
-          <Button
-            sx={{
-              width: "100%",
-              height: "100%",
-              color: "with",
-              backgroundColor: "rosybrown",
-              mt: 3,
-            }}
-            variant="contained"
-            onClick={() => signOut()}
-          >
-            Sair
-          </Button>
-        </div>
+            <AppMenu />
+          </Box>
+        </Container>
       )}
-    </div>
+      <Copyright />
+    </>
   );
 };
 

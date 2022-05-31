@@ -15,6 +15,7 @@ import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
 import { GoBackButton } from "./components/GoBackButton";
 import { Loader } from "./components/Loader";
+import theme from "../styles/theme/lightThemeOptions";
 
 function Dashboard({
   accessToken,
