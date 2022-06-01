@@ -7,9 +7,8 @@ import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
 import { TemporaryDrawer } from "./components/Drawer";
 import { InsightsSummary } from "./components/InsigthsSummary";
 
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
-import "../styles/Home.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
@@ -32,14 +31,14 @@ function Dashboard({
   return (
     <>
       {loading && <Loader />}
-      <Box
+      <Container
+        maxWidth="xl"
+        component="main"
         sx={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#f5f5f5",
         }}
       >
-        <GoBackButton sx={{ alignSelf: "flex-start" }} />
         <Box sx={{ flexGrow: 1 }}>
           <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
           <PrimarySearchAppBar accessToken={accessToken} />
@@ -60,7 +59,7 @@ function Dashboard({
           )}
         </Box>
         <Copyright sx={{ mt: 5 }} />
-      </Box>
+      </Container>
     </>
   );
 }

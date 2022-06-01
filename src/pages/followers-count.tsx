@@ -15,6 +15,7 @@ import { FollowersReport } from "./components/FollowersReport";
 import { Header } from "./components/Header";
 import { SecondarySearchAppBar } from "./components/SecondarySearchAppBar";
 import { Copyright } from "./components/Copyright";
+import theme from "../styles/theme/lightThemeOptions";
 
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
@@ -79,7 +80,7 @@ const FollowerCount = ({
       <Box
         sx={{ flexGrow: 1, padding: 4, display: "flex", alignItems: "center" }}
       >
-        <GoBackButton />
+        <GoBackButton sx={{ color: theme.palette.primary.main }} />
         <Header>Análise de Seguidores dos últimos 30 dias</Header>
       </Box>
       <SecondarySearchAppBar />

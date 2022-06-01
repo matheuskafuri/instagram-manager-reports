@@ -83,10 +83,11 @@ const FollowersReport = ({ insight }: FollowersReport) => {
             display: "flex",
             flexDirection: "column",
             height: 440,
-            borderRadius: "5px",
+            borderRadius: "10px",
             backgroundColor: "#fff",
             border: "1px solid #e0e0e0",
             alignItems: "center",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
           <AreaModelChart
@@ -104,11 +105,12 @@ const FollowersReport = ({ insight }: FollowersReport) => {
             display: "flex",
             flexDirection: "column",
             height: 440,
-            borderRadius: "5px",
+            borderRadius: "10px",
             backgroundColor: "#fff",
             border: "1px solid #e0e0e0",
             mt: 2,
             alignItems: "center",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
           <AccumulatedChart
@@ -123,6 +125,8 @@ const FollowersReport = ({ insight }: FollowersReport) => {
               display: "flex",
               flexDirection: "column",
               height: 440,
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
             }}
           >
             <DataGrid

@@ -28,6 +28,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { GoBackButton } from "../GoBackButton";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -102,6 +103,7 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
   const { user } = useAuthContext();
   const { setInsights } = useInsightsContext();
   const { search, setSearch } = useSearchContext();
+  console.log(user);
 
   const [initialDate, setInitialDate] = useState<Date | null>(new Date());
   const [finalDate, setFinalDate] = useState<Date | null>(new Date());
@@ -251,6 +253,8 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          <GoBackButton />
+
           <Typography
             variant="h6"
             noWrap

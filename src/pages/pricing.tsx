@@ -1,7 +1,6 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utility/firebase.config";
-import { GoBackButton } from "./components/GoBackButton";
 import { Loader } from "./components/Loader";
 import { PricingComponent } from "./components/PricingComponent";
 import { SiteNavBar } from "./components/SiteNavBar";
@@ -14,7 +13,6 @@ const Pricing = () => {
       {!user && userLoading && <Loader />}
       {user && !userLoading && (
         <>
-          <GoBackButton />
           <SiteNavBar />
           <PricingComponent userUid={user.uid} />
         </>

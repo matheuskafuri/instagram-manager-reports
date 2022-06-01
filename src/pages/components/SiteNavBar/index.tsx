@@ -14,6 +14,7 @@ import {
   Avatar,
 } from "@mui/material";
 import theme from "../../../styles/theme/lightThemeOptions";
+import { GoBackButton } from "../GoBackButton";
 
 const SiteNavBar = () => {
   const { signOut, user } = useAuthContext();
@@ -29,6 +30,7 @@ const SiteNavBar = () => {
       }}
     >
       <Toolbar sx={{ flexWrap: "wrap" }}>
+        <GoBackButton />
         <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
           Manager Report
         </Typography>

@@ -54,9 +54,8 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
       <IconButton
         size="large"
         edge="start"
-        color="inherit"
         aria-label="open drawer"
-        sx={{ mr: 2 }}
+        sx={{ mr: 2, color: theme.palette.primary.main }}
         onClick={toggleDrawer(true)}
       >
         <MenuIcon />
