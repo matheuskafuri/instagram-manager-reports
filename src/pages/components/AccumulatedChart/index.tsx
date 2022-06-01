@@ -49,11 +49,11 @@ const AccumulatedChart = ({ data, title }: AccumulatedChartProps) => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="time"
-            stroke={theme.palette.text.secondary}
+            stroke={theme.palette.text.primary}
             style={theme.typography.body2}
           />
           <YAxis
-            stroke={theme.palette.text.secondary}
+            stroke={theme.palette.text.primary}
             style={theme.typography.body2}
           >
             <Label

@@ -3,12 +3,7 @@ import React from "react";
 
 const Copyright = (props: any) => {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
+    <Typography variant="body2" color="text.primary" align="center" {...props}>
       {"Copyright © "}
       <Link color="inherit" href="https://nitec.com.br/">
         Nitec

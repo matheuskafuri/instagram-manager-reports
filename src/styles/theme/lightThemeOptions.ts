@@ -13,10 +13,14 @@ const theme = createTheme({
     },
     background: {
       paper: "#fff",
-      default: "##fafafa",
+      default: "#fafafa",
     },
     error: {
       main: red.A400,
+    },
+    text: {
+      primary: "#02182B",
+      secondary: "#fafafa",
     },
   },
 });

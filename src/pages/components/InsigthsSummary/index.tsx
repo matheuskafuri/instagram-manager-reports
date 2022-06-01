@@ -7,6 +7,7 @@ import {
 } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useInsightsContext } from "../../../context/insights";
+import theme from "../../../styles/theme/lightThemeOptions";
 import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
 import { AuxiliarPanel } from "../AuxiliarPanel";
@@ -59,6 +60,8 @@ const InsightsSummary = () => {
               display: "flex",
               flexDirection: "column",
               height: 440,
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
             }}
           >
             <DataGrid
@@ -87,11 +90,12 @@ const InsightsSummary = () => {
             display: "flex",
             flexDirection: "column",
             height: 400,
-            borderRadius: "5px",
+            borderRadius: "10px",
             backgroundColor: "#fff",
             border: "1px solid #e0e0e0",
             mt: 2,
             alignItems: "center",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
         >
           <AreaModelChart data={chartData} />
@@ -105,6 +109,8 @@ const InsightsSummary = () => {
               display: "flex",
               flexDirection: "column",
               height: 240,
+              borderRadius: "10px",
+              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
             }}
           >
             <AuxiliarPanel data={chartData} />

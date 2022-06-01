@@ -14,15 +14,12 @@ import {
   CardContent,
 } from "@mui/material";
 import { Loader } from "./components/Loader";
-import { useAuthContext } from "../context/auth";
 import { Header } from "./components/Header";
 import { FacebookButton } from "./components/SocialLoginButton";
-import theme from "../styles/theme/lightThemeOptions";
 import { AppMenu } from "./components/AppMenu";
 import { Copyright } from "./components/Copyright";
 
 const Home = () => {
-  const router = useRouter();
   const [user, userLoading] = useAuthState(auth);
 
   return (
@@ -31,7 +28,7 @@ const Home = () => {
 
       {!user && !userLoading && (
         <Container component="main" maxWidth="sm" sx={{ padding: 4 }}>
-          <Header>Welcome to the Manager Report!</Header>
+          <Header>Bem-Vindo ao Manager Report!</Header>
           {/* Criar fluxograma de registro do usuário */}
           <Box
             sx={{
@@ -49,7 +46,7 @@ const Home = () => {
       {user && !userLoading && (
         <Container component="main" maxWidth="xl" sx={{ mb: 4 }}>
           <Box sx={{ marginTop: 2, display: "flex", alignItems: "flex-start" }}>
-            <Header>Welcome back, {user.displayName}!</Header>
+            <Header>Bem-vindo de volta, {user.displayName}!</Header>
           </Box>
           <Box
             sx={{

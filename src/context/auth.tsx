@@ -6,8 +6,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import usePremiumStatus from "../../stripe/usePremiumStatus";
-import { createCheckoutSession } from "../../stripe/createCheckoutSession";
 
 type AuthContextData = {
   user: User | null;
@@ -96,6 +94,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         picture: firebaseUser.photoURL!,
       });
     }
+    console.log(firebaseUser);
   }, [firebaseUser]);
 
   return (

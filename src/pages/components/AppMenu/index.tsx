@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import theme from "../../../styles/theme/lightThemeOptions";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -12,27 +13,34 @@ import {
   Typography,
 } from "@mui/material";
 import { SiteNavBar } from "../SiteNavBar";
+import StarIcon from "@mui/icons-material/Star";
 
 const tiers = [
   {
     title: "Dashboard",
     subtitle: "Veja seus reports",
-    description: "Acesse seus reports e gerencie seus insights.",
+    description: [
+      "Acesse seus reports e gerencie seus insights.",
+      "Exporte suas tabelas de dados para o Excel.",
+    ],
     buttonText: "Ir para o Dashboard",
     buttonLink: "/dashboard",
     buttonVariant: "contained",
     buttonColor: "royalblue",
-    backgroundColor: "#fff",
+    backgroundColor: "theme.palette.background.paper",
   },
   {
     title: "Adicionar Contas",
     subtitle: "Adicione mais contas ao seu Dashboard",
-    description: "Adicione mais contas ao seu Dashboard.",
+    description: [
+      "Adicione mais contas ao seu Dashboard.",
+      "Gere relatórios para todas as suas contas.",
+    ],
     buttonText: "Adicionar Contas",
     buttonLink: "/",
     buttonVariant: "contained",
     buttonColor: "#e91e63",
-    backgroundColor: "#fff",
+    backgroundColor: "theme.palette.background.paper",
   },
 ];
 
@@ -42,7 +50,7 @@ const AppMenu = () => {
     <>
       <SiteNavBar />
       <Container
-        maxWidth="md"
+        maxWidth="lg"
         component="div"
         sx={{
           marginTop: "2.5rem",
@@ -75,13 +83,29 @@ const AppMenu = () => {
                   }}
                 />
                 <CardContent>
-                  <Typography
-                    variant="subtitle1"
-                    align="center"
-                    fontWeight="semiBold"
-                  >
-                    {tier.description}
-                  </Typography>
+                  {tier.description.map((line) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        mb: 2,
+                      }}
+                      key={line}
+                    >
+                      <StarIcon
+                        sx={{ mr: 1, color: theme.palette.primary.main }}
+                      />
+
+                      <Typography
+                        variant="subtitle1"
+                        align="center"
+                        fontWeight="semiBold"
+                      >
+                        {line}
+                      </Typography>
+                    </Box>
+                  ))}
                 </CardContent>
                 <CardActions>
                   <Button
