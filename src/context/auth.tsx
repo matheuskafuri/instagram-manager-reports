@@ -19,11 +19,15 @@ type AuthProviderProps = {
 
 const AuthContext = createContext({} as AuthContextData);
 
-const handleCookies = (accessToken: any) => {
+const handleCookies = (accessToken: any, username: string) => {
   setCookie(null, "accessToken", accessToken, {
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     path: "/",
   });
+  setCookie(null, "username", username, {
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    path: "/",
+  } as any);
 };
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -34,6 +38,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const signOut = async () => {
     auth.signOut().then(() => {
       destroyCookie(null, "accessToken");
+      destroyCookie(null, "username");
     });
     setUser(null);
     router.push("/");
@@ -72,7 +77,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         };
 
         setUser(user);
-        handleCookies(accessToken);
+        handleCookies(accessToken, user.name);
         router.push("/");
       })
       .catch((error) => {
