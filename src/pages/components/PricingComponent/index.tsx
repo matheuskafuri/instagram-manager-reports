@@ -12,7 +12,6 @@ import {
   GlobalStyles,
   Grid,
   Typography,
-  Link,
 } from "@mui/material";
 import { Copyright } from "../Copyright";
 import { createCheckoutSession } from "../../../../stripe/createCheckoutSession";

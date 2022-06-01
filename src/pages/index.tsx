@@ -1,18 +1,8 @@
 import React from "react";
 import { auth } from "../utility/firebase.config";
-import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-import {
-  Typography,
-  Button,
-  Box,
-  Container,
-  Card,
-  Grid,
-  CardHeader,
-  CardContent,
-} from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { Loader } from "./components/Loader";
 import { Header } from "./components/Header";
 import { FacebookButton } from "./components/SocialLoginButton";

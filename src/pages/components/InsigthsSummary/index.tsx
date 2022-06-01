@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Container, Grid, Paper } from "@mui/material";
 import {
   DataGrid,
@@ -5,13 +6,10 @@ import {
   GridToolbar,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import React, { useState } from "react";
 import { useInsightsContext } from "../../../context/insights";
-import theme from "../../../styles/theme/lightThemeOptions";
 import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
 import { AuxiliarPanel } from "../AuxiliarPanel";
-import { Chart } from "../Chart";
 import { AreaModelChart } from "../Chart/AreaChart";
 
 const sum = (values: number[]) => {

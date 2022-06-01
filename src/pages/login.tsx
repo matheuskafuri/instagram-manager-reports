@@ -3,13 +3,18 @@ import { Box, Container, Typography, Avatar, Button } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { useAuthContext } from "../context/auth";
 import { Copyright } from "./components/Copyright";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { parseCookies } from "nookies";
 
-const Login = () => {
+const Login = ({
+  username,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { signInWithFacebook } = useAuthContext();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     signInWithFacebook();
   };
+  const userName = username;
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -27,7 +32,7 @@ const Login = () => {
           <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
-          Bem vindo ao <br />
+          Olá {userName} <br />
           Instagram Manager Report 🚀
         </Typography>
         <Typography component="p" sx={{ mt: 4 }}>
@@ -47,6 +52,21 @@ const Login = () => {
       <Copyright sx={{ mt: 5 }} />
     </Container>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { username } = parseCookies(ctx);
+
+  if (!username) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { username } };
 };
 
 export default Login;

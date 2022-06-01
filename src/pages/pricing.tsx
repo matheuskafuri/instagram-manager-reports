@@ -1,3 +1,5 @@
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utility/firebase.config";
@@ -19,6 +21,21 @@ const Pricing = () => {
       )}
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { username } = parseCookies(ctx);
+
+  if (!username) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { username } };
 };
 
 export default Pricing;

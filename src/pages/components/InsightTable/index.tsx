@@ -9,7 +9,6 @@ import {
 import { Container, Grid, Paper } from "@mui/material";
 import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
-import { Chart } from "../Chart";
 import { AreaModelChart } from "../Chart/AreaChart";
 import { AuxiliarPanel } from "../AuxiliarPanel";
 
