@@ -19,6 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import StarIcon from "@mui/icons-material/Star";
 import { IconButton, Toolbar } from "@mui/material";
 import { deepOrange, lightBlue } from "@mui/material/colors";
+import AddIcon from '@mui/icons-material/Add';
 
 type TemporaryDrawerProps = {
   handleInsightSelection: (insight: Insights | undefined) => void;
@@ -69,7 +70,18 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
           onKeyDown={toggleDrawer(false)}
         >
           <List>
+              <ListItemButton
+                onClick={() => {
+                  router.push("/add-accounts");
+                }}
+              >
+                <ListItemIcon>
+                  <AddIcon sx={{ color: lightBlue[800] }} />
+                </ListItemIcon>
+                <ListItemText primary="Adicionar conta" />
+              </ListItemButton>
             {[
+              
               "Todos Insights",
               "Alcance",
               "Impressões",

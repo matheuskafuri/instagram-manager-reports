@@ -7,13 +7,14 @@ import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
 import { TemporaryDrawer } from "./components/Drawer";
 import { InsightsSummary } from "./components/InsigthsSummary";
 
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 
 import "../styles/Home.module.css";
 import { useAuthContext } from "../context/auth";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
+import { AppHeader } from "./components/AppHeader";
 
 function Dashboard() {
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
@@ -34,10 +35,7 @@ function Dashboard() {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <Box sx={{ flexGrow: 1 }}>
-        <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
-        <PrimarySearchAppBar />
-      </Box>
+      <AppHeader handleInsightSelection={setSelectedInsight}/>
       <Box
         component="main"
         sx={{
