@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useTheme } from "@mui/material/styles";
 import {
   AreaChart,
@@ -7,7 +7,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
   Label,
 } from "recharts";
 
@@ -47,11 +46,11 @@ const AreaModelChart = ({ data, title }: AreaModelChartProps) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="time"
-          stroke={theme.palette.text.secondary}
+          stroke={theme.palette.text.primary}
           style={theme.typography.body2}
         />
         <YAxis
-          stroke={theme.palette.text.secondary}
+          stroke={theme.palette.text.primary}
           style={theme.typography.body2}
         >
           <Label

@@ -20,6 +20,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { IconButton, Toolbar } from "@mui/material";
 import { deepOrange, lightBlue } from "@mui/material/colors";
 import AddIcon from '@mui/icons-material/Add';
+import theme from "../../../styles/theme/lightThemeOptions";
 
 type TemporaryDrawerProps = {
   handleInsightSelection: (insight: Insights | undefined) => void;
@@ -55,9 +56,8 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
       <IconButton
         size="large"
         edge="start"
-        color="inherit"
         aria-label="open drawer"
-        sx={{ mr: 2 }}
+        sx={{ mr: 2, color: theme.palette.primary.main }}
         onClick={toggleDrawer(true)}
       >
         <MenuIcon />
@@ -92,9 +92,9 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
                 <ListItemButton onClick={() => handleSelect(text)}>
                   <ListItemIcon>
                     {index % 2 === 0 ? (
-                      <InboxIcon sx={{ color: deepOrange[500] }} />
+                      <InboxIcon sx={{ color: theme.palette.secondary.main }} />
                     ) : (
-                      <MailIcon sx={{ color: lightBlue[800] }} />
+                      <MailIcon sx={{ color: theme.palette.primary.light }} />
                     )}
                   </ListItemIcon>
                   <ListItemText primary={text} />
@@ -114,23 +114,23 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
                 <ListItemButton onClick={() => handleSelect(text)}>
                   <ListItemIcon>
                     {index % 2 === 0 ? (
-                      <InboxIcon sx={{ color: lightBlue[800] }} />
+                      <InboxIcon sx={{ color: theme.palette.primary.light }} />
                     ) : (
-                      <MailIcon sx={{ color: deepOrange[500] }} />
+                      <MailIcon sx={{ color: theme.palette.secondary.main }} />
                     )}
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
             ))}
-            <ListItem disablePadding sx={{ backgroundColor: lightBlue[50] }}>
+            <ListItem disablePadding sx={{ backgroundColor: "#e1f5fe" }}>
               <ListItemButton
                 onClick={() => {
                   router.push("/followers-count");
                 }}
               >
                 <ListItemIcon>
-                  <StarIcon sx={{ color: lightBlue[800] }} />
+                  <StarIcon sx={{ color: theme.palette.primary.light }} />
                 </ListItemIcon>
                 <ListItemText primary="Análise de Seguidores" />
               </ListItemButton>

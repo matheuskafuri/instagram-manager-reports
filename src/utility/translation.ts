@@ -16,6 +16,10 @@ export const translation: TranslationProps = {
     columnsPanelTextFieldPlaceholder: "Nome da coluna",
     toolbarQuickFilterPlaceholder: "Pesquisar",
     toolbarExport: "Exportar",
+    toolbarDensity: "Densidade",
+    toolbarDensityCompact: "Compacto",
+    toolbarDensityStandard: "Padrão",
+    toolbarDensityComfortable: "Amplo",
 
     toolbarFilters: "Filtros",
     toolbarFiltersLabel: "Mostrar filtros",

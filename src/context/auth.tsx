@@ -1,16 +1,16 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "../types/user";
 import { auth, db } from "../utility/firebase.config";
 import { FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { destroyCookie, setCookie } from "nookies";
 import { useRouter } from "next/router";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type AuthContextData = {
   user: User | null;
   signInWithFacebook: () => void;
   signOut: () => void;
-  isAuthenticated: boolean;
 };
 
 type AuthProviderProps = {
@@ -19,21 +19,26 @@ type AuthProviderProps = {
 
 const AuthContext = createContext({} as AuthContextData);
 
-const handleCookies = (accessToken: any) => {
+const handleCookies = (accessToken: any, username: string) => {
   setCookie(null, "accessToken", accessToken, {
-    maxAge: 1000 * 60 * 60 * 24 * 30,
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     path: "/",
   });
+  setCookie(null, "username", username, {
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    path: "/",
+  } as any);
 };
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const isAuthenticated = !!user;
+  const [firebaseUser] = useAuthState(auth);
   const router = useRouter();
 
   const signOut = async () => {
     auth.signOut().then(() => {
       destroyCookie(null, "accessToken");
+      destroyCookie(null, "username");
     });
     setUser(null);
     router.push("/");
@@ -59,7 +64,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } catch (error) {
           console.log(error);
         }
-
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential?.accessToken;
@@ -73,7 +77,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         };
 
         setUser(user);
-        handleCookies(accessToken);
+        handleCookies(accessToken, user.name);
         router.push("/");
       })
       .catch((error) => {
@@ -86,10 +90,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       });
   };
 
+  useEffect(() => {
+    if (firebaseUser) {
+      setUser({
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName!,
+        email: firebaseUser.email!,
+        picture: firebaseUser.photoURL!,
+      });
+    }
+    console.log(firebaseUser);
+  }, [firebaseUser]);
+
   return (
-    <AuthContext.Provider
-      value={{ user, signInWithFacebook, signOut, isAuthenticated }}
-    >
+    <AuthContext.Provider value={{ user, signInWithFacebook, signOut }}>
       {children}
     </AuthContext.Provider>
   );

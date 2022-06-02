@@ -1,9 +1,28 @@
-import { ThemeOptions } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
 
-const lightThemeOptions: ThemeOptions = {
+// Create a theme instance.
+const theme = createTheme({
   palette: {
-    mode: "light",
+    primary: {
+      main: "#556cd6",
+      light: "#0277bd",
+    },
+    secondary: {
+      main: "#ff5722",
+    },
+    background: {
+      paper: "#fff",
+      default: "#fafafa",
+    },
+    error: {
+      main: red.A400,
+    },
+    text: {
+      primary: "#02182B",
+      secondary: "#fafafa",
+    },
   },
-};
+});
 
-export default lightThemeOptions;
+export default theme;

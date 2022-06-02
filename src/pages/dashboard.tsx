@@ -7,51 +7,56 @@ import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
 import { TemporaryDrawer } from "./components/Drawer";
 import { InsightsSummary } from "./components/InsigthsSummary";
 
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
-import "../styles/Home.module.css";
-import { useAuthContext } from "../context/auth";
-import { useRouter } from "next/router";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
+import { Copyright } from "./components/Copyright";
+import { Loader } from "./components/Loader";
 import { AppHeader } from "./components/AppHeader";
 
-function Dashboard() {
+function Dashboard({
+  accessToken,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [loading, setLoading] = useState(true);
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
-  const { user } = useAuthContext();
-  const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      router.push("/login");
+    if (accessToken) {
+      setLoading(false);
     }
-  }, [router, user]);
+  }, [accessToken]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <AppHeader handleInsightSelection={setSelectedInsight}/>
-      <Box
+    <>
+      {loading && <Loader />}
+      <Container
+        maxWidth="xl"
         component="main"
         sx={{
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-          mt: 2,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {selectedInsight ? (
-          <InsightTable insight={selectedInsight} />
-        ) : (
-          <InsightsSummary />
-        )}
-      </Box>
-    </Box>
+        <AppHeader handleInsightSelection={setSelectedInsight}/>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
+            mt: 2,
+          }}
+        >
+          {selectedInsight ? (
+            <InsightTable insight={selectedInsight} />
+          ) : (
+            <InsightsSummary />
+          )}
+        </Box>
+        <Copyright sx={{ mt: 5 }} />
+      </Container>
+    </>
   );
 }
 
@@ -61,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!accessToken) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/login",
         permanent: false,
       },
     };

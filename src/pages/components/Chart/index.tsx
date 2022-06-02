@@ -1,13 +1,6 @@
-import * as React from "react";
+import React from "react";
 import { useTheme } from "@mui/material/styles";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Label,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, Label } from "recharts";
 
 import { Insights } from "../../../types/insights";
 import Title from "../Title";

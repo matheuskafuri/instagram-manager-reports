@@ -40,11 +40,11 @@ const AuxiliarPanel = ({ title, data }: AuxiliarPanelProps) => {
         Total: {panelDataTotalValueFormatted}
       </Typography>
       {data.values ? (
-        <Typography color="text.secondary" sx={{ flex: 1 }}>
+        <Typography color="text.primary" sx={{ flex: 1 }}>
           De {panelDataInitialDate} Até {panelDataFinalDate}
         </Typography>
       ) : null}
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
+      <Typography color="text.primary" sx={{ flex: 1 }}>
         {description}
       </Typography>
       {/* <div>
