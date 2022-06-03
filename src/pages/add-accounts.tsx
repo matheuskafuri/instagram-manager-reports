@@ -6,8 +6,6 @@ function AddAccount() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
         backgroundColor: "#f5f5f5",
       }}
     >
@@ -17,7 +15,9 @@ function AddAccount() {
         sx={{
           height: "100vh",
           width: "100%",
+          margin: 'auto',
           marginTop: "1rem",
+
         }}
       >
       <AddAccountForm/>

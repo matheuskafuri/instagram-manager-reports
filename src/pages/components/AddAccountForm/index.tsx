@@ -1,26 +1,30 @@
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, styled, TextField, Tooltip } from "@mui/material"
+import { Avatar, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, styled, TextField, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddIcon from '@mui/icons-material/Add';
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
-import { lightGreen, lightBlue, red, deepOrange } from "@mui/material/colors";
+import { lightGreen, lightBlue, red, grey } from "@mui/material/colors";
 import fireBaseApi from "../../../services/fireBaseApi";
 import { useAuthContext } from "../../../context/auth";
+import theme from "../../../styles/theme/lightThemeOptions";
+import { Loader } from "../Loader";
 
 export interface Account {
-  id: string
+  facebookId: string
   nickname: string
 }
 
 const AddAccountBox = styled(Box)(({ theme }) => ({
   padding: "1rem",
-  backgroundColor: lightBlue[600],
-  maxWidth: 700,
-  height: 300,
+  backgroundColor: theme.palette.primary.main,
+  maxWidth: 750,
+  height: 350,
   borderRadius: 4,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-around',
+  alignItems: 'center',
+  margin: 'auto'
 }));
 
 const AddAccountForm = () => {
@@ -28,56 +32,71 @@ const AddAccountForm = () => {
 
   const [accountsAdded, setAccountsAdded] = useState<Account[]>([]);
   const [addAccountModalOpen, setAddAccountModalOpen] = useState<boolean>(false)
-  const [accountId, setAccountId] = useState<string>('')
+  const [facebookId, setFacebookId] = useState<string>('')
   const [accountNickname, setAccountNickname] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  function onClose(){
+  function onClose() {
     setAddAccountModalOpen(false)
-    setAccountId('')
+    setFacebookId('')
     setAccountNickname('')
   }
 
   function addAccount() {
-    if (accountId === '') {
-      toast.error('Por favor, informe o ID da conta')
+    if (facebookId === '') {
+      toast.warning('Por favor, informe o ID da conta')
       return
     }
     if (accountNickname === '') {
-      toast.error('Por favor, dê um apelido para sua conta')
+      toast.warning('Por favor, dê um apelido para sua conta')
+      return
+    }
+    if (accountNickname.length > 10) {
+      toast.warning('Apelido de no máximo 10 caracteres')
       return
     }
     setAccountsAdded([...accountsAdded, {
-      id: accountId,
+      facebookId: facebookId,
       nickname: accountNickname,
     }])
     setAddAccountModalOpen(false)
-    setAccountId('')
+    setFacebookId('')
     setAccountNickname('')
   }
 
   async function handleConfirm() {
-    const data = {
-      userId: user?.id,
-      accounts: accountsAdded,
+    try {
+      setIsLoading(true)
+      const data = {
+        userId: user?.id,
+        accounts: accountsAdded,
+      }
+      await fireBaseApi.post('/accounts', data)
+      toast.success('Contas sincronizadas com sucesso')
+      setAccountsAdded([])
+      setIsLoading(false)
+    } catch (err) {
+      toast.error('Erro ao adicionar contas')
+      setIsLoading(false)
     }
-    await fireBaseApi.post('/accounts', data)
-    toast.success('Contas adicionadas com sucesso')
-    setAccountsAdded([])
   }
 
-  function handleRemoveAccount(accountId: string) {
-    setAccountsAdded(accountsAdded.filter(account => account.id !== accountId))
+  function handleRemoveAccount(facebookId: string) {
+    setAccountsAdded(accountsAdded.filter(account => account.facebookId !== facebookId))
   }
 
   function handleCancel() {
     setAddAccountModalOpen(false)
-    setAccountId('')
+    setFacebookId('')
     setAccountNickname('')
   }
 
   return (
     <>
       <AddAccountBox>
+        <Typography component="h1" variant="h5" sx={{ textAlign: "center", mb: '2rem', color: '#fff' }}>
+          Adicione as contas que você deseja monitorar
+        </Typography>
         <Stack
           width="100%"
           maxHeight="80%"
@@ -95,11 +114,11 @@ const AddAccountForm = () => {
                 sx={{
                   position: "relative",
                 }}
-                key={account.id}
+                key={account.facebookId}
               >
-                <Tooltip title={account.id} >
+                <Tooltip title={account.facebookId} >
                   <Avatar
-                    sx={{ width: 96, height: 96, bgcolor: lightGreen[400] }}>
+                    sx={{ width: 96, height: 96, bgcolor: lightGreen[700] }}>
                     {account.nickname}
 
                   </Avatar>
@@ -109,10 +128,10 @@ const AddAccountForm = () => {
                   sx={{
                     position: "absolute",
                     top: 0,
-                    right: -10,
+                    right: -20,
                   }}
                   aria-label="add-account"
-                  onClick={() => handleRemoveAccount(account.id)}
+                  onClick={() => handleRemoveAccount(account.facebookId)}
                 >
                   <HighlightOffTwoToneIcon sx={{ color: red[900] }} />
                 </IconButton>
@@ -134,19 +153,24 @@ const AddAccountForm = () => {
             my: "auto"
           }}
         >
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: lightGreen[700],
-              ":hover": {
-                backgroundColor: lightGreen[800],
-              }
-            }}
-            onClick={handleConfirm}
-            disabled={accountsAdded.length === 0}
-          >
-            Confirmar
-          </Button>
+          {
+            isLoading ?
+            <CircularProgress sx={{color:lightGreen[300]}}  /> : (
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: lightGreen[700],
+                    ":hover": {
+                      backgroundColor: lightGreen[800],
+                    }
+                  }}
+                  onClick={handleConfirm}
+                  disabled={accountsAdded.length === 0}
+                >
+                  Sincronizar contas
+                </Button>
+              )
+          }
         </Box>
       </AddAccountBox>
 
@@ -154,20 +178,27 @@ const AddAccountForm = () => {
         open={addAccountModalOpen}
         onClose={onClose}
       >
-        <DialogTitle >
-          Insira o Id da conta que deseja adicionar
-        </DialogTitle>
+
         <DialogContent>
+          <DialogTitle >
+            Insira as informações da conta
+          </DialogTitle>
           <TextField
             required
             id="outlined-required"
-            label="Código de conta"
+            label="ID da conta"
             variant="outlined"
-            value={accountId}
+            value={facebookId}
             fullWidth
-            onChange={(e) => setAccountId(e.target.value)}
+            onChange={(e) => setFacebookId(e.target.value)}
             sx={{
-              marginTop: "1rem"
+              marginTop: "1rem",
+              ":hover": {
+                borderColor: theme.palette.primary.main,
+              }
+            }}
+            InputLabelProps={{
+              style: { color: theme.palette.primary.main },
             }}
           />
           <TextField
@@ -180,16 +211,23 @@ const AddAccountForm = () => {
             fullWidth
             onChange={(e) => setAccountNickname(e.target.value)}
             sx={{
-              marginTop: "1rem"
+              marginTop: "1rem",
+              ":hover": {
+                borderColor: theme.palette.primary.main,
+              }
+            }}
+            InputLabelProps={{
+              style: { color: theme.palette.primary.main },
             }}
           />
+          <DialogActions>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={addAccount} autoFocus>
+              Add
+            </Button>
+          </DialogActions>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={addAccount} autoFocus>
-            Add
-          </Button>
-        </DialogActions>
+
       </Dialog>
     </>
   )
