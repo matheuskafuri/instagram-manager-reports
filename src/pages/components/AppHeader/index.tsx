@@ -5,14 +5,17 @@ import { PrimarySearchAppBar } from "../PrimarySearchAppBar";
 
 interface AppHeaderProps {
   handleInsightSelection?: (insight: Insights | undefined) => void;
+  accessToken: string;
 }
 
-export function AppHeader({ handleInsightSelection = () =>{} }: AppHeaderProps) {
-
+export function AppHeader({
+  handleInsightSelection = () => {},
+  accessToken,
+}: AppHeaderProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TemporaryDrawer handleInsightSelection={handleInsightSelection} />
-      <PrimarySearchAppBar />
+      <PrimarySearchAppBar accessToken={accessToken} />
     </Box>
-  )
+  );
 }

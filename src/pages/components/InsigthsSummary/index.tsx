@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Grid, Paper } from "@mui/material";
+import React from "react";
+import { Box, Container, Grid, Paper } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
@@ -7,10 +7,9 @@ import {
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import { useInsightsContext } from "../../../context/insights";
-import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
-import { AuxiliarPanel } from "../AuxiliarPanel";
 import { AreaModelChart } from "../Chart/AreaChart";
+import theme from "../../../styles/theme/lightThemeOptions";
 
 const sum = (values: number[]) => {
   return values.reduce((acc, value) => acc + value, 0);
@@ -46,7 +45,6 @@ const columns: GridColDef[] = [
 
 const InsightsSummary = () => {
   const { insights } = useInsightsContext();
-  const [chartData, setChartData] = useState<Insights>({} as Insights);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -70,50 +68,52 @@ const InsightsSummary = () => {
               checkboxSelection
               getRowId={(row) => row.name}
               components={{ Toolbar: GridToolbar }}
-              onCellDoubleClick={(data) => {
-                setChartData(data.row);
-              }}
               localeText={translation.ptBR}
               disableSelectionOnClick
             />
           </Paper>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={9}
-          lg={8}
-          sx={{
-            p: 2,
-            display: "flex",
-            flexDirection: "column",
-            height: 400,
-            borderRadius: "10px",
-            backgroundColor: "#fff",
-            border: "1px solid #e0e0e0",
-            mt: 2,
-            alignItems: "center",
-            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <AreaModelChart data={chartData} />
-        </Grid>
-        <Grid item xs={12} md={4} lg={3} sx={{ flexGrow: 1 }}>
-          <Paper
+        <div style={{ width: "100%", whiteSpace: "nowrap" }}>
+          <Box
+            component="div"
             sx={{
-              p: 2,
-              mt: 2,
-              ml: 2,
               display: "flex",
-              flexDirection: "column",
-              height: 240,
+              flexDirection: "row",
+              my: 2,
+              p: 1,
               borderRadius: "10px",
               boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              backgroundColor: theme.palette.primary.main,
             }}
+            overflow="auto"
           >
-            <AuxiliarPanel data={chartData} />
-          </Paper>
-        </Grid>
+            {insights &&
+              insights.length > 0 &&
+              insights.map((insight) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={9}
+                  lg={8}
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 400,
+                    borderRadius: "10px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #e0e0e0",
+                    alignItems: "center",
+                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                    mx: 2,
+                  }}
+                  key={insight.name}
+                >
+                  <AreaModelChart data={insight} />
+                </Grid>
+              ))}
+          </Box>
+        </div>
       </Grid>
     </Container>
   );

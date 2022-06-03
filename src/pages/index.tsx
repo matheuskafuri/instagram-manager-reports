@@ -8,6 +8,8 @@ import { Header } from "./components/Header";
 import { FacebookButton } from "./components/SocialLoginButton";
 import { AppMenu } from "./components/AppMenu";
 import { Copyright } from "./components/Copyright";
+import { Hero } from "./components/LandingPageHero";
+import { LandingCaroussel } from "./components/LandingCaroussel";
 
 const Home = () => {
   const [user, userLoading] = useAuthState(auth);
@@ -17,19 +19,11 @@ const Home = () => {
       {!user && userLoading && <Loader />}
 
       {!user && !userLoading && (
-        <Container component="main" maxWidth="sm" sx={{ padding: 4 }}>
+        <Container component="main" maxWidth="xl" sx={{ padding: 4 }}>
           <Header>Bem-Vindo ao Manager Report!</Header>
           {/* Criar fluxograma de registro do usuário */}
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <FacebookButton />
-          </Box>
+          <Hero />
+          <LandingCaroussel />
         </Container>
       )}
 

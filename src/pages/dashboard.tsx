@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Insights } from "../types/insights";
 import { InsightTable } from "./components/InsightTable";
@@ -13,19 +13,40 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
 import { Loader } from "./components/Loader";
-import { AppHeader } from "./components/AppHeader";
+import fireBaseApi from "../services/fireBaseApi";
+import { toast } from "react-toastify";
+import { Account } from "./components/AddAccountForm";
+import { auth } from "../utility/firebase.config";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Dashboard({
   accessToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [user] = useAuthState(auth);
+
   const [loading, setLoading] = useState(true);
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
+  const [userAccounts, setUserAccounts] = useState<Account[]>([]);
+
+  const LoadUserAccounts = useCallback(async () => {
+    try {
+      const data = {
+        userId: user?.uid,
+      };
+      const accounts = await fireBaseApi.post("/load-accounts", data);
+      setUserAccounts(accounts.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Erro ao adicionar contas");
+    }
+  }, [user]);
 
   useEffect(() => {
     if (accessToken) {
+      LoadUserAccounts();
       setLoading(false);
     }
-  }, [accessToken]);
+  }, [LoadUserAccounts, accessToken]);
 
   return (
     <>
@@ -38,7 +59,13 @@ function Dashboard({
           flexDirection: "column",
         }}
       >
-        <AppHeader handleInsightSelection={setSelectedInsight}/>
+        <Box sx={{ flexGrow: 1 }}>
+          <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
+          <PrimarySearchAppBar
+            accessToken={accessToken}
+            userAccounts={userAccounts}
+          />
+        </Box>
         <Box
           component="main"
           sx={{

@@ -20,7 +20,7 @@ const FacebookButton = () => {
         onClick={() => signInWithFacebook()}
       >
         <FacebookIcon sx={{ mr: 2 }} />
-        Entre com Facebook
+        Entrar com Facebook
       </Button>
     </Box>
   );

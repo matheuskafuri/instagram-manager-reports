@@ -5,6 +5,7 @@ import { Insights } from "../../../types/insights";
 import { useInsightsContext } from "../../../context/insights";
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   List,
@@ -12,15 +13,20 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import StarIcon from "@mui/icons-material/Star";
+import InsightsIcon from "@mui/icons-material/Insights";
+import HomeIcon from "@mui/icons-material/Home";
 import { IconButton, Toolbar } from "@mui/material";
-import { deepOrange, lightBlue } from "@mui/material/colors";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import theme from "../../../styles/theme/lightThemeOptions";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../../utility/firebase.config";
+import usePremiumStatus from "../../../../stripe/usePremiumStatus";
 
 type TemporaryDrawerProps = {
   handleInsightSelection: (insight: Insights | undefined) => void;
@@ -29,6 +35,8 @@ type TemporaryDrawerProps = {
 const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
   const [state, setState] = useState(false);
   const { insights } = useInsightsContext();
+  const [firebaseUser] = useAuthState(auth);
+  const isUserPremium = usePremiumStatus(firebaseUser!);
   const router = useRouter();
 
   const handleSelect = (text: string) => {
@@ -70,41 +78,69 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
           onKeyDown={toggleDrawer(false)}
         >
           <List>
-              <ListItemButton
-                onClick={() => {
-                  router.push("/add-accounts");
-                }}
+            <Divider component="li" />
+            <li>
+              <Typography
+                sx={{ mt: 0.5, ml: 2 }}
+                color="text.primary"
+                display="block"
+                variant="caption"
               >
-                <ListItemIcon>
-                  <AddIcon sx={{ color: lightBlue[800] }} />
-                </ListItemIcon>
-                <ListItemText primary="Adicionar conta" />
-              </ListItemButton>
+                Páginas
+              </Typography>
+            </li>
+            <ListItemButton
+              onClick={() => {
+                router.push("/");
+              }}
+            >
+              <ListItemIcon>
+                <HomeIcon sx={{ color: theme.palette.primary.main }} />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                router.push("/add-accounts");
+              }}
+            >
+              <ListItemIcon>
+                <AddIcon sx={{ color: theme.palette.primary.main }} />
+              </ListItemIcon>
+              <ListItemText primary="Adicionar conta" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                router.push("/followers-count");
+              }}
+              sx={{
+                backgroundColor: "#e1f5fe",
+              }}
+            >
+              <ListItemIcon>
+                <StarIcon sx={{ color: theme.palette.primary.main }} />
+              </ListItemIcon>
+              <ListItemText primary="Análise de Seguidores" />
+            </ListItemButton>
+          </List>
+          <List dense={true}>
+            <Divider component="li" variant="inset" />
+            <li>
+              <Typography
+                sx={{ mt: 0.5, ml: 9 }}
+                color="text.primary"
+                display="block"
+                variant="caption"
+              >
+                Insights
+              </Typography>
+            </li>
             {[
-              
               "Todos Insights",
               "Alcance",
               "Impressões",
               "Visualizações do perfil",
               "Contactos de e-mail",
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton onClick={() => handleSelect(text)}>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? (
-                      <InboxIcon sx={{ color: theme.palette.secondary.main }} />
-                    ) : (
-                      <MailIcon sx={{ color: theme.palette.primary.light }} />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {[
               "Cliques em Obter Indicações",
               "Cliques para chamada",
               "Cliques para mensagem",
@@ -114,28 +150,29 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
                 <ListItemButton onClick={() => handleSelect(text)}>
                   <ListItemIcon>
                     {index % 2 === 0 ? (
-                      <InboxIcon sx={{ color: theme.palette.primary.light }} />
+                      <InsightsIcon
+                        sx={{ color: theme.palette.secondary.main }}
+                      />
                     ) : (
-                      <MailIcon sx={{ color: theme.palette.secondary.main }} />
+                      <InsightsIcon
+                        sx={{ color: theme.palette.primary.main }}
+                      />
                     )}
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItemButton>
               </ListItem>
             ))}
-            <ListItem disablePadding sx={{ backgroundColor: "#e1f5fe" }}>
-              <ListItemButton
-                onClick={() => {
-                  router.push("/followers-count");
-                }}
-              >
-                <ListItemIcon>
-                  <StarIcon sx={{ color: theme.palette.primary.light }} />
-                </ListItemIcon>
-                <ListItemText primary="Análise de Seguidores" />
-              </ListItemButton>
-            </ListItem>
           </List>
+          {!isUserPremium && (
+            <Button
+              href="/pricing"
+              variant="contained"
+              sx={{ my: 1, mx: 1.5, bgcolor: theme.palette.secondary.main }}
+            >
+              Upgrade to premium
+            </Button>
+          )}
         </Box>
       </Drawer>
       <Header>Dashboard</Header>

@@ -17,6 +17,7 @@ const theme = createTheme({
     },
     error: {
       main: red.A400,
+      dark: red[900],
     },
     text: {
       primary: "#02182B",

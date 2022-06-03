@@ -1,9 +1,6 @@
-import React, { FormEvent, useState, MouseEvent } from "react";
-import { useInsightsContext } from "../../../context/insights";
+import React, { FormEvent, useState, MouseEvent, ChangeEvent } from "react";
 import { useAuthContext } from "../../../context/auth";
 import { useSearchContext } from "../../../context/search";
-
-import api from "../../../services/api";
 
 import { styled, alpha } from "@mui/material/styles";
 import {
@@ -11,20 +8,18 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  InputBase,
   Button,
   Avatar,
   Box,
-  Badge,
   Menu,
   MenuItem,
-  TextField,
+  Select,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { Account } from "../AddAccountForm";
+import { toast } from "react-toastify";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -55,8 +50,9 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(Select)(({ theme }) => ({
   color: "inherit",
+  padding: theme.spacing(1, 1, 1, 0),
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -69,20 +65,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const SecondarySearchAppBar = () => {
+type SecondarySearchAppBarProps = {
+  userAccounts: Account[];
+  handleNewSearch: (search: string) => void;
+};
+
+const SecondarySearchAppBar = ({
+  userAccounts,
+  handleNewSearch,
+}: SecondarySearchAppBarProps) => {
   const { user } = useAuthContext();
-  const { setInsights } = useInsightsContext();
   const { search, setSearch } = useSearchContext();
 
-  const [initialDate, setInitialDate] = useState<Date | null>(new Date());
-  const [finalDate, setFinalDate] = useState<Date | null>(new Date());
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSearch(event.target.value);
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search) {
-      alert("Por favor, preencha o campo de busca");
+      toast.error("Por favor, preencha o campo de busca");
       return;
     }
+    handleNewSearch(search);
   };
 
   // mobile menu logic
@@ -186,16 +191,19 @@ const SecondarySearchAppBar = () => {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Procurar…"
-                inputProps={{ "aria-label": "search" }}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                }}
-              />
+                labelId="select-helper"
+                id="select"
+                value={search}
+                onChange={(e: any) => handleChange(e)}
+                label="Selecione uma conta"
+              >
+                {userAccounts.map((account) => (
+                  <MenuItem key={account.facebookId} value={account.facebookId}>
+                    {account.nickname}
+                  </MenuItem>
+                ))}
+              </StyledInputBase>
             </Search>
-            <LocalizationProvider
-              dateAdapter={AdapterDateFns}
-            ></LocalizationProvider>
             <Button
               color="inherit"
               size="small"

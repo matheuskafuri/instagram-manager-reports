@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, MouseEvent } from "react";
+import React, { FormEvent, useState, MouseEvent, ChangeEvent } from "react";
 import { useInsightsContext } from "../../../context/insights";
 import { useAuthContext } from "../../../context/auth";
 import { useSearchContext } from "../../../context/search";
@@ -11,22 +11,23 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  InputBase,
   Button,
   Avatar,
   Box,
-  Badge,
   Menu,
   MenuItem,
   TextField,
+  Select,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import SearchIcon from "@mui/icons-material/Search";
 import { GoBackButton } from "../GoBackButton";
+import { Account } from "../AddAccountForm";
+import { toast } from "react-toastify";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,8 +76,9 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(Select)(({ theme }) => ({
   color: "inherit",
+  padding: theme.spacing(1, 1, 1, 0),
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -95,13 +97,20 @@ const dateFormatter = (date: string) => {
 
 type PrimarySearchAppBarProps = {
   accessToken: string;
+  userAccounts: Account[];
 };
 
-const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
+const PrimarySearchAppBar = ({
+  accessToken,
+  userAccounts,
+}: PrimarySearchAppBarProps) => {
   const { user } = useAuthContext();
   const { setInsights } = useInsightsContext();
   const { search, setSearch } = useSearchContext();
-  console.log(user);
+
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSearch(event.target.value);
+  };
 
   const [initialDate, setInitialDate] = useState<Date | null>(new Date());
   const [finalDate, setFinalDate] = useState<Date | null>(new Date());
@@ -123,7 +132,7 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search) {
-      alert("Por favor, preencha o campo de busca");
+      toast.error("Por favor, informe uma conta no campo de busca.");
       return;
     }
 
@@ -135,7 +144,7 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
       : finalDateAsUnixTimestamp - 86400 * 30;
 
     if (finalDateAsUnixTimestamp - initialDateUnixTimestamp > 30 * 86400) {
-      alert("Período máximo de 30 dias");
+      toast.error("O período máximo de busca é de 30 dias");
       return;
     }
 
@@ -163,8 +172,11 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
         };
       });
       setInsights(insights);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(
+        "Ocorreu um erro ao buscar os insights. Por favor, verifique o código da conta."
+      );
     }
   };
 
@@ -271,12 +283,18 @@ const PrimarySearchAppBar = ({ accessToken }: PrimarySearchAppBarProps) => {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Procurar…"
-                inputProps={{ "aria-label": "search" }}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                }}
-              />
+                labelId="select-helper"
+                id="select"
+                value={search}
+                onChange={(e: any) => handleChange(e)}
+                label="Selecione uma conta"
+              >
+                {userAccounts.map((account) => (
+                  <MenuItem key={account.facebookId} value={account.facebookId}>
+                    {account.nickname}
+                  </MenuItem>
+                ))}
+              </StyledInputBase>
             </Search>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateSearch>

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { AddAccountForm } from "./components/AddAccountForm";
-import { AppHeader } from "./components/AppHeader";
+import { SiteNavBar } from "./components/SiteNavBar";
 
 function AddAccount() {
   return (
@@ -9,22 +9,20 @@ function AddAccount() {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <AppHeader />
+      <SiteNavBar />
       <Box
         component="main"
         sx={{
           height: "100vh",
           width: "100%",
-          margin: 'auto',
+          margin: "auto",
           marginTop: "1rem",
-
         }}
       >
-      <AddAccountForm/>
+        <AddAccountForm />
       </Box>
     </Box>
-  )
+  );
 }
-
 
 export default AddAccount;

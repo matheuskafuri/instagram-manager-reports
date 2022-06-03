@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 
 import { useSearchContext } from "../context/search";
-import { useAuthContext } from "../context/auth";
 import { Insights } from "../types/insights";
 import { GoBackButton } from "./components/GoBackButton";
 import { Box } from "@mui/material";
 
 import api from "../services/api";
-import { useRouter } from "next/router";
 import { FollowersReport } from "./components/FollowersReport";
 import { Header } from "./components/Header";
 import { SecondarySearchAppBar } from "./components/SecondarySearchAppBar";
 import { Copyright } from "./components/Copyright";
 import theme from "../styles/theme/lightThemeOptions";
+import { toast } from "react-toastify";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../utility/firebase.config";
+import fireBaseApi from "../services/fireBaseApi";
+import { Account } from "./components/AddAccountForm";
 
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
@@ -26,48 +29,62 @@ const FollowerCount = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [followerCount, setFollowerCount] = useState<Insights>();
   const { search } = useSearchContext();
-  const { user } = useAuthContext();
-  const router = useRouter();
+  const [user] = useAuthState(auth);
+  const [userAccounts, setUserAccounts] = useState<Account[]>([]);
 
-  const followerCountReport = async (search: string) => {
-    const finalDateAsUnixTimestamp = new Date().getTime() / 1000;
-    const initialDateUnixTimestamp = finalDateAsUnixTimestamp - 86400 * 30;
-
-    const since = initialDateUnixTimestamp.toFixed(0);
-    const until = finalDateAsUnixTimestamp.toFixed(0);
-
+  const LoadUserAccounts = useCallback(async () => {
     try {
-      const response = await api.get(
-        `${search}/insights?metric=follower_count&period=day&since=${since}&until=${until}&access_token=${accessToken}`
-      );
-      const data = response.data.data;
-      const insights = {
-        name: data[0].name,
-        period: data[0].period,
-        title: data[0].title,
-        description: data[0].description,
-        values: data[0].values.map((value: any) => {
-          return {
-            value: value.value,
-            end_time: dateFormatter(value.end_time),
-          };
-        }),
+      const data = {
+        userId: user?.uid,
       };
-      setFollowerCount(insights);
-    } catch (error) {
-      console.log(error);
+      const accounts = await fireBaseApi.post("/load-accounts", data);
+      setUserAccounts(accounts.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Erro ao adicionar contas");
     }
-  };
+  }, [user]);
+
+  const followerCountReport = useCallback(
+    async (search: string) => {
+      const finalDateAsUnixTimestamp = new Date().getTime() / 1000;
+      const initialDateUnixTimestamp = finalDateAsUnixTimestamp - 86400 * 30;
+
+      const since = initialDateUnixTimestamp.toFixed(0);
+      const until = finalDateAsUnixTimestamp.toFixed(0);
+
+      try {
+        const response = await api.get(
+          `${search}/insights?metric=follower_count&period=day&since=${since}&until=${until}&access_token=${accessToken}`
+        );
+        const data = response.data.data;
+        const insights = {
+          name: data[0].name,
+          period: data[0].period,
+          title: data[0].title,
+          description: data[0].description,
+          values: data[0].values.map((value: any) => {
+            return {
+              value: value.value,
+              end_time: dateFormatter(value.end_time),
+            };
+          }),
+        };
+        setFollowerCount(insights);
+      } catch (error) {
+        console.log(error);
+        toast.error("Erro ao carregar seguidores");
+      }
+    },
+    [accessToken]
+  );
 
   useEffect(() => {
-    if (!search) {
-      alert(
-        "Por favor, insira um código de conta válido no campo de pesquisa."
-      );
-      router.push("/dashboard");
+    if (search) {
+      followerCountReport(search);
     }
-    followerCountReport(search);
-  }, []);
+    LoadUserAccounts();
+  }, [LoadUserAccounts, followerCountReport, search]);
 
   return (
     <Box
@@ -83,7 +100,10 @@ const FollowerCount = ({
         <GoBackButton sx={{ color: theme.palette.primary.main }} />
         <Header>Análise de Seguidores dos últimos 30 dias</Header>
       </Box>
-      <SecondarySearchAppBar />
+      <SecondarySearchAppBar
+        handleNewSearch={followerCountReport}
+        userAccounts={userAccounts}
+      />
       <Box
         component="main"
         sx={{

@@ -1,5 +1,5 @@
-import * as React from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
