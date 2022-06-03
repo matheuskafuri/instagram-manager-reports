@@ -37,7 +37,7 @@ const tiers = [
       "Gere relatórios para todas as suas contas.",
     ],
     buttonText: "Adicionar Contas",
-    buttonLink: "/",
+    buttonLink: "/add-accounts",
     buttonVariant: "contained",
     buttonColor: "#e91e63",
     backgroundColor: "theme.palette.background.paper",

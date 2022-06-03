@@ -13,6 +13,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
 import { Loader } from "./components/Loader";
+import { AppHeader } from "./components/AppHeader";
 
 function Dashboard({
   accessToken,
@@ -37,10 +38,7 @@ function Dashboard({
           flexDirection: "column",
         }}
       >
-        <Box sx={{ flexGrow: 1 }}>
-          <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
-          <PrimarySearchAppBar accessToken={accessToken} />
-        </Box>
+        <AppHeader handleInsightSelection={setSelectedInsight}/>
         <Box
           component="main"
           sx={{
