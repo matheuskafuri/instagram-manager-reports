@@ -1,4 +1,6 @@
 import { Box } from "@mui/material";
+import theme from "../styles/theme/lightThemeOptions";
+import { AccountsList } from "./components/AccountsList";
 import { AddAccountForm } from "./components/AddAccountForm";
 import { SiteNavBar } from "./components/SiteNavBar";
 
@@ -6,7 +8,7 @@ function AddAccount() {
   return (
     <Box
       sx={{
-        backgroundColor: "#f5f5f5",
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <SiteNavBar />
@@ -20,6 +22,7 @@ function AddAccount() {
         }}
       >
         <AddAccountForm />
+        <AccountsList />
       </Box>
     </Box>
   );

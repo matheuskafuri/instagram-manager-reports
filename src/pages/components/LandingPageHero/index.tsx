@@ -5,8 +5,6 @@ import Image from "next/image";
 import { FacebookButton } from "../SocialLoginButton";
 import theme from "../../../styles/theme/lightThemeOptions";
 
-const padding = window.innerWidth;
-
 const Hero = () => {
   return (
     <Box

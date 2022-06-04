@@ -22,6 +22,7 @@ import fireBaseApi from "../../../services/fireBaseApi";
 import { useAuthContext } from "../../../context/auth";
 import theme from "../../../styles/theme/lightThemeOptions";
 import { Loader } from "../Loader";
+import { useAccountsContext } from "../../../context/accounts";
 
 export interface Account {
   facebookId: string;
@@ -44,6 +45,8 @@ const AddAccountBox = styled(Box)(({ theme }) => ({
 
 const AddAccountForm = () => {
   const { user } = useAuthContext();
+
+  const { accounts: prevAccounts, setAccounts } = useAccountsContext();
 
   const [accountsAdded, setAccountsAdded] = useState<Account[]>([]);
   const [addAccountModalOpen, setAddAccountModalOpen] =
@@ -85,6 +88,7 @@ const AddAccountForm = () => {
 
   async function handleConfirm() {
     try {
+      let helper = [...prevAccounts];
       setIsLoading(true);
       const data = {
         userId: user?.id,
@@ -92,6 +96,8 @@ const AddAccountForm = () => {
       };
       await fireBaseApi.post("/accounts", data);
       toast.success("Contas sincronizadas com sucesso");
+      helper.push(...accountsAdded);
+      setAccounts(helper);
       setAccountsAdded([]);
       setIsLoading(false);
     } catch (err) {
@@ -100,10 +106,17 @@ const AddAccountForm = () => {
     }
   }
 
-  function handleRemoveAccount(facebookId: string) {
-    setAccountsAdded(
-      accountsAdded.filter((account) => account.facebookId !== facebookId)
+  function handleRemoveAccount(account: Account) {
+    const index = accountsAdded.findIndex(
+      (acc) =>
+        acc.facebookId === account.facebookId &&
+        acc.nickname === account.nickname
     );
+    if (index === -1) {
+      return;
+    }
+    accountsAdded.splice(index, 1);
+    setAccountsAdded([...accountsAdded]);
   }
 
   function handleCancel() {
@@ -160,7 +173,7 @@ const AddAccountForm = () => {
                     right: -20,
                   }}
                   aria-label="add-account"
-                  onClick={() => handleRemoveAccount(account.facebookId)}
+                  onClick={() => handleRemoveAccount(account)}
                 >
                   <HighlightOffTwoToneIcon
                     sx={{ color: theme.palette.error.dark }}
@@ -201,6 +214,7 @@ const AddAccountForm = () => {
               }}
               onClick={handleConfirm}
               disabled={accountsAdded.length === 0}
+              type="button"
             >
               Sincronizar contas
             </Button>

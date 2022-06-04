@@ -19,6 +19,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utility/firebase.config";
 import fireBaseApi from "../services/fireBaseApi";
 import { Account } from "./components/AddAccountForm";
+import { useAccountsContext } from "../context/accounts";
 
 const dateFormatter = (date: string) => {
   return Intl.DateTimeFormat("pt-BR").format(new Date(date));
@@ -29,21 +30,8 @@ const FollowerCount = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [followerCount, setFollowerCount] = useState<Insights>();
   const { search } = useSearchContext();
+  const { loadUserAccounts, accounts } = useAccountsContext();
   const [user] = useAuthState(auth);
-  const [userAccounts, setUserAccounts] = useState<Account[]>([]);
-
-  const LoadUserAccounts = useCallback(async () => {
-    try {
-      const data = {
-        userId: user?.uid,
-      };
-      const accounts = await fireBaseApi.post("/load-accounts", data);
-      setUserAccounts(accounts.data);
-    } catch (err) {
-      console.log(err);
-      toast.error("Erro ao adicionar contas");
-    }
-  }, [user]);
 
   const followerCountReport = useCallback(
     async (search: string) => {
@@ -83,15 +71,15 @@ const FollowerCount = ({
     if (search) {
       followerCountReport(search);
     }
-    LoadUserAccounts();
-  }, [LoadUserAccounts, followerCountReport, search]);
+    loadUserAccounts();
+  }, [followerCountReport, search]);
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <Box
@@ -102,7 +90,7 @@ const FollowerCount = ({
       </Box>
       <SecondarySearchAppBar
         handleNewSearch={followerCountReport}
-        userAccounts={userAccounts}
+        userAccounts={accounts}
       />
       <Box
         component="main"

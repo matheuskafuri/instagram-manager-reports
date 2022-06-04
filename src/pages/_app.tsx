@@ -6,6 +6,7 @@ import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import { InsightsContextProvider } from "../context/insights";
 import { AuthProvider } from "../context/auth";
 import { SearchContextProvider } from "../context/search";
+import { AccountsContextProvider } from "../context/accounts";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -29,16 +30,18 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
 
   return (
     <AuthProvider>
-      <InsightsContextProvider>
-        <SearchContextProvider>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={lightTheme}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </CacheProvider>
-        </SearchContextProvider>
-      </InsightsContextProvider>
+      <AccountsContextProvider>
+        <InsightsContextProvider>
+          <SearchContextProvider>
+            <CacheProvider value={emotionCache}>
+              <ThemeProvider theme={lightTheme}>
+                <CssBaseline />
+                <Component {...pageProps} />
+              </ThemeProvider>
+            </CacheProvider>
+          </SearchContextProvider>
+        </InsightsContextProvider>
+      </AccountsContextProvider>
       <ToastContainer />
     </AuthProvider>
   );

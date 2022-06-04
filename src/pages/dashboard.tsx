@@ -13,40 +13,25 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
 import { Loader } from "./components/Loader";
-import fireBaseApi from "../services/fireBaseApi";
-import { toast } from "react-toastify";
-import { Account } from "./components/AddAccountForm";
 import { auth } from "../utility/firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useAccountsContext } from "../context/accounts";
 
 function Dashboard({
   accessToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [user] = useAuthState(auth);
+  const { loadUserAccounts, accounts } = useAccountsContext();
 
   const [loading, setLoading] = useState(true);
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
-  const [userAccounts, setUserAccounts] = useState<Account[]>([]);
-
-  const LoadUserAccounts = useCallback(async () => {
-    try {
-      const data = {
-        userId: user?.uid,
-      };
-      const accounts = await fireBaseApi.post("/load-accounts", data);
-      setUserAccounts(accounts.data);
-    } catch (err) {
-      console.log(err);
-      toast.error("Erro ao adicionar contas");
-    }
-  }, [user]);
 
   useEffect(() => {
     if (accessToken) {
-      LoadUserAccounts();
+      loadUserAccounts();
       setLoading(false);
     }
-  }, [LoadUserAccounts, accessToken]);
+  }, []);
 
   return (
     <>
@@ -63,7 +48,7 @@ function Dashboard({
           <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
           <PrimarySearchAppBar
             accessToken={accessToken}
-            userAccounts={userAccounts}
+            userAccounts={accounts}
           />
         </Box>
         <Box

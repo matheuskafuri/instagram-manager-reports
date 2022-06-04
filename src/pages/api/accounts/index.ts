@@ -1,5 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { addDoc, collection, doc, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../../../utility/firebase.config";
 import { Account } from "../../components/AddAccountForm";
 import { toast } from "react-toastify";
@@ -31,7 +38,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     accounts.forEach(async (account: Account) => {
-      await addDoc(collectionRef, account);
+      const accountRef = doc(collectionRef, account.facebookId);
+      await setDoc(accountRef, account);
     });
 
     res.status(200).json(data);
