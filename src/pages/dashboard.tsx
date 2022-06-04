@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Insights } from "../types/insights";
 import { InsightTable } from "./components/InsightTable";
@@ -13,14 +13,11 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 import { Copyright } from "./components/Copyright";
 import { Loader } from "./components/Loader";
-import { auth } from "../utility/firebase.config";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useAccountsContext } from "../context/accounts";
 
 function Dashboard({
   accessToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [user] = useAuthState(auth);
   const { loadUserAccounts, accounts } = useAccountsContext();
 
   const [loading, setLoading] = useState(true);

@@ -11,6 +11,9 @@ import { Insights } from "../../../types/insights";
 import { translation } from "../../../utility/translation";
 import { AccumulatedChart } from "../AccumulatedChart";
 import { AreaModelChart } from "../Chart/AreaChart";
+import { useSearchContext } from "../../../context/search";
+import { useAccountsContext } from "../../../context/accounts";
+import theme from "../../../styles/theme/lightThemeOptions";
 
 const columns: GridColDef[] = [
   {
@@ -38,7 +41,13 @@ type FollowersReport = {
 };
 const FollowersReport = ({ insight }: FollowersReport) => {
   const chartOneData = insight;
-  const chartTwoData = insight;
+  const { search } = useSearchContext();
+  const { accounts } = useAccountsContext();
+
+  const searchedAccount = accounts.find(
+    (account) => account.facebookId === search
+  );
+  const displayName = searchedAccount?.nickname || null;
 
   let tableData: any[] = [];
   if (insight.values) {
@@ -59,6 +68,14 @@ const FollowersReport = ({ insight }: FollowersReport) => {
         mb: 4,
       }}
     >
+      <Typography
+        variant="h4"
+        sx={{ textAlign: "center", color: theme.palette.secondary.main, mb: 4 }}
+        fontWeight="bold"
+      >
+        <span style={{ color: theme.palette.primary.main }}>Conta:</span>{" "}
+        {displayName}
+      </Typography>
       <Grid
         container
         sx={{
