@@ -199,6 +199,10 @@ const PrimarySearchAppBar = ({
     setAnchorEl(event.currentTarget);
   };
 
+  const handleModalOpen = () => {
+    setAddAccountModalOpen(true);
+  };
+
   function onClose() {
     setAddAccountModalOpen(false);
   }
@@ -259,7 +263,7 @@ const PrimarySearchAppBar = ({
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={handleModalOpen}>
         <IconButton
           size="large"
           aria-label="make-a-search"
@@ -270,7 +274,7 @@ const PrimarySearchAppBar = ({
         >
           <SearchIcon />
         </IconButton>
-        <p>Search</p>
+        <p>Pesquisar</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -383,7 +387,7 @@ const PrimarySearchAppBar = ({
           {/* modal */}
           <Dialog open={addAccountModalOpen} onClose={onClose}>
             <DialogContent>
-              <DialogTitle>Insira as informações da conta</DialogTitle>
+              <DialogTitle>Preencha todos os campos</DialogTitle>
               <Stack
                 component="form"
                 spacing={3}
