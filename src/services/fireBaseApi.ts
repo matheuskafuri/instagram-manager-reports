@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const fireBaseApi = axios.create({
-  baseURL: "http://localhost:3000/api/",
+  baseURL: "https://instagram-manager-reports.vercel.app/api/",
 });
 
 export default fireBaseApi;
-
