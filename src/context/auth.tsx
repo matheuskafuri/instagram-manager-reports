@@ -99,7 +99,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         picture: firebaseUser.photoURL!,
       });
     }
-    console.log(firebaseUser);
   }, [firebaseUser]);
 
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase.config";
-import { Loader } from "../pages/components/Loader";
+import { Loader } from "../components/Loader";
 
 export const withPublic = (WrappedComponent: any) => {
   const WithPublic = (props: any) => {

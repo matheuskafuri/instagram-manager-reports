@@ -2,30 +2,33 @@
 import { useEffect, useState } from "react";
 
 import { Insights } from "../types/insights";
-import { InsightTable } from "./components/InsightTable";
-import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
-import { TemporaryDrawer } from "./components/Drawer";
-import { InsightsSummary } from "./components/InsigthsSummary";
+import { InsightTable } from "../components/InsightTable";
+import { PrimarySearchAppBar } from "../components/PrimarySearchAppBar";
+import { TemporaryDrawer } from "../components/Drawer";
+import { InsightsSummary } from "../components/InsigthsSummary";
 
 import { Box, Container } from "@mui/material";
 
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
-import { Copyright } from "./components/Copyright";
-import { Loader } from "./components/Loader";
-import { AppHeader } from "./components/AppHeader";
+import { Copyright } from "../components/Copyright";
+import { Loader } from "../components/Loader";
+import { useAccountsContext } from "../context/accounts";
 
 function Dashboard({
   accessToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { loadUserAccounts, accounts } = useAccountsContext();
+
   const [loading, setLoading] = useState(true);
   const [selectedInsight, setSelectedInsight] = useState<Insights>();
 
   useEffect(() => {
     if (accessToken) {
+      loadUserAccounts();
       setLoading(false);
     }
-  }, [accessToken]);
+  }, []);
 
   return (
     <>
@@ -38,7 +41,13 @@ function Dashboard({
           flexDirection: "column",
         }}
       >
-        <AppHeader handleInsightSelection={setSelectedInsight}/>
+        <Box sx={{ flexGrow: 1 }}>
+          <TemporaryDrawer handleInsightSelection={setSelectedInsight} />
+          <PrimarySearchAppBar
+            accessToken={accessToken}
+            userAccounts={accounts}
+          />
+        </Box>
         <Box
           component="main"
           sx={{

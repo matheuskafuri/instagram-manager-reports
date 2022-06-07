@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
-import { SiteNavBar } from "./components/SiteNavBar";
+import { SiteNavBar } from "../components/SiteNavBar";
 
 const PrivacyPolicy = () => {
   return (
