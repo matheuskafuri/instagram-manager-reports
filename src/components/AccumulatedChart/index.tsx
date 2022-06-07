@@ -13,6 +13,7 @@ import {
 
 import { Insights } from "../../types/insights";
 import Title from "../Title";
+import { useMediaQuery } from "@mui/material";
 
 type AccumulatedChartProps = {
   data: Insights;
@@ -20,6 +21,7 @@ type AccumulatedChartProps = {
 };
 const AccumulatedChart = ({ data, title }: AccumulatedChartProps) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery("(max-width: 700px)");
 
   let chartData: any[] = [];
   if (data.values) {
@@ -43,8 +45,9 @@ const AccumulatedChart = ({ data, title }: AccumulatedChartProps) => {
             top: 16,
             right: 16,
             bottom: 0,
-            left: 24,
+            left: isMobile ? 0 : 24,
           }}
+          width={isMobile ? 350 : 600}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -56,17 +59,19 @@ const AccumulatedChart = ({ data, title }: AccumulatedChartProps) => {
             stroke={theme.palette.text.primary}
             style={theme.typography.body2}
           >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: "middle",
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              {data.title}
-            </Label>
+            {isMobile ? null : (
+              <Label
+                angle={270}
+                position="left"
+                style={{
+                  textAnchor: "middle",
+                  fill: theme.palette.text.primary,
+                  ...theme.typography.body1,
+                }}
+              >
+                {data.title}
+              </Label>
+            )}
           </YAxis>
           <Line
             isAnimationActive={false}

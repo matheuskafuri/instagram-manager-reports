@@ -18,6 +18,11 @@ import {
   MenuItem,
   TextField,
   Select,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Stack,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -184,6 +189,8 @@ const PrimarySearchAppBar = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
+  const [addAccountModalOpen, setAddAccountModalOpen] =
+    useState<boolean>(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -191,6 +198,14 @@ const PrimarySearchAppBar = ({
   const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  function onClose() {
+    setAddAccountModalOpen(false);
+  }
+
+  function handleCancel() {
+    setAddAccountModalOpen(false);
+  }
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -244,6 +259,19 @@ const PrimarySearchAppBar = ({
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="make-a-search"
+          onClick={() => setAddAccountModalOpen(true)}
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <SearchIcon />
+        </IconButton>
+        <p>Search</p>
+      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -351,6 +379,66 @@ const PrimarySearchAppBar = ({
               <MoreIcon />
             </IconButton>
           </Box>
+
+          {/* modal */}
+          <Dialog open={addAccountModalOpen} onClose={onClose}>
+            <DialogContent>
+              <DialogTitle>Insira as informações da conta</DialogTitle>
+              <Stack
+                component="form"
+                spacing={3}
+                onSubmit={handleSubmit}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "1rem",
+                }}
+              >
+                <StyledInputBase
+                  labelId="select-helper"
+                  id="select"
+                  value={search}
+                  onChange={(e: any) => handleChange(e)}
+                  label="Selecione uma conta"
+                >
+                  {userAccounts.map((account) => (
+                    <MenuItem
+                      key={account.facebookId}
+                      value={account.facebookId}
+                    >
+                      {account.nickname}
+                    </MenuItem>
+                  ))}
+                </StyledInputBase>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateSearch>
+                    <DesktopDatePicker
+                      inputFormat="dd/MM/yyyy"
+                      minDate={new Date("2020-01-01")}
+                      value={initialDate}
+                      onChange={handleInitialDate}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </DateSearch>
+                  <DateSearch>
+                    <DesktopDatePicker
+                      inputFormat="dd/MM/yyyy"
+                      minDate={new Date("2020-01-01")}
+                      value={finalDate}
+                      onChange={handleFinalDate}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </DateSearch>
+                </LocalizationProvider>
+                <DialogActions>
+                  <Button onClick={handleCancel}>Cancel</Button>
+                  <Button type="submit" autoFocus>
+                    Pesquisar
+                  </Button>
+                </DialogActions>
+              </Stack>
+            </DialogContent>
+          </Dialog>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

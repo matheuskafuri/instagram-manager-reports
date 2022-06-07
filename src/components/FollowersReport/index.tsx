@@ -6,14 +6,12 @@ import {
   GridToolbar,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { Container, Grid, Paper, Typography } from "@mui/material";
+import { Container, Grid, Paper, useMediaQuery } from "@mui/material";
 import { Insights } from "../../types/insights";
 import { translation } from "../../utility/translation";
 import { AccumulatedChart } from "../AccumulatedChart";
 import { AreaModelChart } from "../Chart/AreaChart";
-import { useSearchContext } from "../../context/search";
-import { useAccountsContext } from "../../context/accounts";
-import theme from "../../styles/theme/lightThemeOptions";
+import { AccountTitle } from "../AccountTitle";
 
 const columns: GridColDef[] = [
   {
@@ -41,13 +39,7 @@ type FollowersReport = {
 };
 const FollowersReport = ({ insight }: FollowersReport) => {
   const chartOneData = insight;
-  const { search } = useSearchContext();
-  const { accounts } = useAccountsContext();
-
-  const searchedAccount = accounts.find(
-    (account) => account.facebookId === search
-  );
-  const displayName = searchedAccount?.nickname || null;
+  const isMobile = useMediaQuery("(max-width: 700px)");
 
   let tableData: any[] = [];
   if (insight.values) {
@@ -68,19 +60,11 @@ const FollowersReport = ({ insight }: FollowersReport) => {
         mb: 4,
       }}
     >
-      <Typography
-        variant="h4"
-        sx={{ textAlign: "center", color: theme.palette.secondary.main, mb: 4 }}
-        fontWeight="bold"
-      >
-        <span style={{ color: theme.palette.primary.main }}>Conta:</span>{" "}
-        {displayName}
-      </Typography>
+      <AccountTitle />
       <Grid
         container
         sx={{
           display: {
-            xs: "none",
             md: "flex",
             lg: "flex",
             xl: "flex",
@@ -106,6 +90,7 @@ const FollowersReport = ({ insight }: FollowersReport) => {
             alignItems: "center",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
+          overflow={isMobile ? "auto" : "none"}
         >
           <AreaModelChart
             title="Novos Seguidores por Dia"
@@ -129,6 +114,7 @@ const FollowersReport = ({ insight }: FollowersReport) => {
             alignItems: "center",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
+          overflow={isMobile ? "auto" : "none"}
         >
           <AccumulatedChart
             title="Novos Seguidores nos últimos 30 dias"

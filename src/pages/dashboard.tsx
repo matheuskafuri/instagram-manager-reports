@@ -14,6 +14,7 @@ import { parseCookies } from "nookies";
 import { Copyright } from "../components/Copyright";
 import { Loader } from "../components/Loader";
 import { useAccountsContext } from "../context/accounts";
+import { AccountTitle } from "../components/AccountTitle";
 
 function Dashboard({
   accessToken,
@@ -57,6 +58,7 @@ function Dashboard({
             mt: 2,
           }}
         >
+          <AccountTitle />
           {selectedInsight ? (
             <InsightTable insight={selectedInsight} />
           ) : (

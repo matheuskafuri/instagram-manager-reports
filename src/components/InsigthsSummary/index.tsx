@@ -10,6 +10,7 @@ import { useInsightsContext } from "../../context/insights";
 import { translation } from "../../utility/translation";
 import { AreaModelChart } from "../Chart/AreaChart";
 import theme from "../../styles/theme/lightThemeOptions";
+import { useMediaQuery } from "@mui/material";
 
 const sum = (values: number[]) => {
   return values.reduce((acc, value) => acc + value, 0);
@@ -45,6 +46,7 @@ const columns: GridColDef[] = [
 
 const InsightsSummary = () => {
   const { insights } = useInsightsContext();
+  const isMobile = useMediaQuery("(max-width: 700px)");
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -78,9 +80,9 @@ const InsightsSummary = () => {
             component="div"
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: isMobile ? "column" : "row",
               my: 2,
-              p: 1,
+              p: isMobile ? 0 : 1,
               borderRadius: "10px",
               boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
               backgroundColor: theme.palette.primary.main,
@@ -105,9 +107,11 @@ const InsightsSummary = () => {
                     border: "1px solid #e0e0e0",
                     alignItems: "center",
                     boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                    mx: 2,
+                    mx: isMobile ? 0 : 2,
+                    mb: isMobile ? "2rem" : "0",
                   }}
                   key={insight.name}
+                  overflow={isMobile ? "auto" : "none"}
                 >
                   <AreaModelChart data={insight} />
                 </Grid>

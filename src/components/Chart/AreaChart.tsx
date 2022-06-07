@@ -12,6 +12,7 @@ import {
 
 import { Insights } from "../../types/insights";
 import Title from "../Title";
+import { useMediaQuery } from "@mui/material";
 
 type AreaModelChartProps = {
   data: Insights;
@@ -19,6 +20,7 @@ type AreaModelChartProps = {
 };
 const AreaModelChart = ({ data, title }: AreaModelChartProps) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery("(max-width: 700px)");
 
   let chartData: any[] = [];
   if (data.values) {
@@ -38,10 +40,10 @@ const AreaModelChart = ({ data, title }: AreaModelChartProps) => {
           top: 16,
           right: 16,
           bottom: 0,
-          left: 24,
+          left: isMobile ? 0 : 24,
         }}
         height={300}
-        width={600}
+        width={isMobile ? 350 : 600}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
@@ -53,17 +55,19 @@ const AreaModelChart = ({ data, title }: AreaModelChartProps) => {
           stroke={theme.palette.text.primary}
           style={theme.typography.body2}
         >
-          <Label
-            angle={270}
-            position="left"
-            style={{
-              textAnchor: "middle",
-              fill: theme.palette.text.primary,
-              ...theme.typography.body1,
-            }}
-          >
-            {data.title}
-          </Label>
+          {isMobile ? null : (
+            <Label
+              angle={270}
+              position="left"
+              style={{
+                textAnchor: "middle",
+                fill: theme.palette.text.primary,
+                ...theme.typography.body1,
+              }}
+            >
+              {data.title}
+            </Label>
+          )}
         </YAxis>
         <Tooltip />
         <Area

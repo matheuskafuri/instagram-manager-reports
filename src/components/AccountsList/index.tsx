@@ -8,11 +8,13 @@ import fireBaseApi from "../../services/fireBaseApi";
 import { auth } from "../../utility/firebase.config";
 import { Account } from "../AddAccountForm";
 import { useAccountsContext } from "../../context/accounts";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const AccountsList = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { accounts, setAccounts, loadUserAccounts } = useAccountsContext();
+  const cellphoneQuery = useMediaQuery("(min-width:700px)");
 
   const handleRemoveAccountFromDB = async (account: Account) => {
     try {
@@ -55,13 +57,13 @@ const AccountsList = () => {
           paddingBottom: "0.5rem",
           color: theme.palette.text.primary,
         }}
+        fontSize={["1.8rem", "2rem", "2.2rem"]}
       >
         Contas Gerenciadas
       </Typography>
       <Stack
         spacing={2}
-        direction="row"
-        overflow="auto"
+        direction={cellphoneQuery ? "row" : "column"}
         sx={{
           boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           backgroundColor: theme.palette.primary.main,

@@ -6,7 +6,7 @@ import {
   GridToolbar,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { Container, Grid, Paper } from "@mui/material";
+import { Container, Grid, Paper, useMediaQuery } from "@mui/material";
 import { Insights } from "../../types/insights";
 import { translation } from "../../utility/translation";
 import { AreaModelChart } from "../Chart/AreaChart";
@@ -38,6 +38,7 @@ type InsightTable = {
 };
 const InsightTable = ({ insight }: InsightTable) => {
   const chartData = insight;
+  const isMobile = useMediaQuery("(max-width: 700px)");
 
   let tableData: any[] = [];
   if (insight.values) {
@@ -94,6 +95,7 @@ const InsightTable = ({ insight }: InsightTable) => {
             alignItems: "center",
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
           }}
+          overflow={isMobile ? "auto" : "none"}
         >
           <AreaModelChart data={chartData} />
         </Grid>
