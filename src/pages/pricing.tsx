@@ -3,9 +3,9 @@ import { parseCookies } from "nookies";
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utility/firebase.config";
-import { Loader } from "./components/Loader";
-import { PricingComponent } from "./components/PricingComponent";
-import { SiteNavBar } from "./components/SiteNavBar";
+import { Loader } from "../components/Loader";
+import { PricingComponent } from "../components/PricingComponent";
+import { SiteNavBar } from "../components/SiteNavBar";
 
 const Pricing = () => {
   const [user, userLoading] = useAuthState(auth);

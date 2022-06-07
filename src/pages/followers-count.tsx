@@ -5,20 +5,18 @@ import { parseCookies } from "nookies";
 
 import { useSearchContext } from "../context/search";
 import { Insights } from "../types/insights";
-import { GoBackButton } from "./components/GoBackButton";
+import { GoBackButton } from "../components/GoBackButton";
 import { Box } from "@mui/material";
 
 import api from "../services/api";
-import { FollowersReport } from "./components/FollowersReport";
-import { Header } from "./components/Header";
-import { SecondarySearchAppBar } from "./components/SecondarySearchAppBar";
-import { Copyright } from "./components/Copyright";
+import { FollowersReport } from "../components/FollowersReport";
+import { Header } from "../components/Header";
+import { SecondarySearchAppBar } from "../components/SecondarySearchAppBar";
+import { Copyright } from "../components/Copyright";
 import theme from "../styles/theme/lightThemeOptions";
 import { toast } from "react-toastify";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utility/firebase.config";
-import fireBaseApi from "../services/fireBaseApi";
-import { Account } from "./components/AddAccountForm";
 import { useAccountsContext } from "../context/accounts";
 
 const dateFormatter = (date: string) => {

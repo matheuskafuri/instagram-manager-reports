@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import theme from "../styles/theme/lightThemeOptions";
-import { AccountsList } from "./components/AccountsList";
-import { AddAccountForm } from "./components/AddAccountForm";
-import { SiteNavBar } from "./components/SiteNavBar";
+import { AccountsList } from "../components/AccountsList";
+import { AddAccountForm } from "../components/AddAccountForm";
+import { SiteNavBar } from "../components/SiteNavBar";
 
 function AddAccount() {
   return (

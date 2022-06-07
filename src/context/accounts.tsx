@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Account } from "../pages/components/AddAccountForm";
+import { Account } from "../components/AddAccountForm";
 import fireBaseApi from "../services/fireBaseApi";
 import { auth } from "../utility/firebase.config";
 

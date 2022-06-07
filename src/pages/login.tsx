@@ -2,7 +2,7 @@ import React, { FormEvent } from "react";
 import { Box, Container, Typography, Avatar, Button } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { useAuthContext } from "../context/auth";
-import { Copyright } from "./components/Copyright";
+import { Copyright } from "../components/Copyright";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
 

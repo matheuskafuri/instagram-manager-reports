@@ -2,17 +2,17 @@
 import { useEffect, useState } from "react";
 
 import { Insights } from "../types/insights";
-import { InsightTable } from "./components/InsightTable";
-import { PrimarySearchAppBar } from "./components/PrimarySearchAppBar";
-import { TemporaryDrawer } from "./components/Drawer";
-import { InsightsSummary } from "./components/InsigthsSummary";
+import { InsightTable } from "../components/InsightTable";
+import { PrimarySearchAppBar } from "../components/PrimarySearchAppBar";
+import { TemporaryDrawer } from "../components/Drawer";
+import { InsightsSummary } from "../components/InsigthsSummary";
 
 import { Box, Container } from "@mui/material";
 
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { parseCookies } from "nookies";
-import { Copyright } from "./components/Copyright";
-import { Loader } from "./components/Loader";
+import { Copyright } from "../components/Copyright";
+import { Loader } from "../components/Loader";
 import { useAccountsContext } from "../context/accounts";
 
 function Dashboard({

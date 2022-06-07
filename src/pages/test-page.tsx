@@ -1,9 +1,7 @@
-import { AddAccountForm } from "./components/AddAccountForm"
+import { AddAccountForm } from "../components/AddAccountForm";
 
 const TestPage = () => {
-  return(
-    <AddAccountForm/>
-  )
-}
+  return <AddAccountForm />;
+};
 
-export default TestPage
+export default TestPage;

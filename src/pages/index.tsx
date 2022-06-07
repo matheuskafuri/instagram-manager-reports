@@ -3,13 +3,12 @@ import { auth } from "../utility/firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { Box, Container } from "@mui/material";
-import { Loader } from "./components/Loader";
-import { Header } from "./components/Header";
-import { FacebookButton } from "./components/SocialLoginButton";
-import { AppMenu } from "./components/AppMenu";
-import { Copyright } from "./components/Copyright";
-import { Hero } from "./components/LandingPageHero";
-import { LandingCaroussel } from "./components/LandingCaroussel";
+import { Loader } from "../components/Loader";
+import { Header } from "../components/Header";
+import { AppMenu } from "../components/AppMenu";
+import { Copyright } from "../components/Copyright";
+import { Hero } from "../components/LandingPageHero";
+import { LandingCaroussel } from "../components/LandingCaroussel";
 
 const Home = () => {
   const [user, userLoading] = useAuthState(auth);

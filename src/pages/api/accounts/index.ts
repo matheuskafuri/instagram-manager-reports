@@ -8,7 +8,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../../../utility/firebase.config";
-import { Account } from "../../components/AddAccountForm";
+import { Account } from "../../../components/AddAccountForm";
 import { toast } from "react-toastify";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
