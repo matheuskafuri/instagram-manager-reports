@@ -31,9 +31,9 @@ function AddAccount() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { user } = parseCookies(ctx);
+  const { username } = parseCookies(ctx);
 
-  if (!user) {
+  if (!username) {
     return {
       redirect: {
         destination: "/login",
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  return { props: { user } };
+  return { props: { username } };
 };
 
 export default AddAccount;
