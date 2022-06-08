@@ -3,6 +3,8 @@ import theme from "../styles/theme/lightThemeOptions";
 import { AccountsList } from "../components/AccountsList";
 import { AddAccountForm } from "../components/AddAccountForm";
 import { SiteNavBar } from "../components/SiteNavBar";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 function AddAccount() {
   return (
@@ -27,5 +29,20 @@ function AddAccount() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { user } = parseCookies(ctx);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { user } };
+};
 
 export default AddAccount;
