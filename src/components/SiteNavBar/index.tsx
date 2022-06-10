@@ -15,11 +15,13 @@ import {
 } from "@mui/material";
 import theme from "../../styles/theme/lightThemeOptions";
 import { GoBackButton } from "../GoBackButton";
+import { UpgradeButton } from "../UpgradeButton";
 
 const SiteNavBar = () => {
   const { signOut, user } = useAuthContext();
   const [firebaseUser] = useAuthState(auth);
   const isUserPremium = usePremiumStatus(firebaseUser!);
+
   return (
     <AppBar
       position="static"
@@ -57,26 +59,21 @@ const SiteNavBar = () => {
             Sair
           </Link>
         </nav>
-        {!isUserPremium && (
-          <Button
-            href="/pricing"
-            variant="contained"
-            sx={{ my: 1, mx: 1.5, bgcolor: theme.palette.secondary.main }}
-          >
-            Upgrade to premium
-          </Button>
+        {!isUserPremium ? (
+          <UpgradeButton />
+        ) : (
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <Avatar alt={user?.name} src={user?.picture} />
+            </IconButton>
+          </Box>
         )}
-        <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <Avatar alt={user?.name} src={user?.picture} />
-          </IconButton>
-        </Box>
       </Toolbar>
     </AppBar>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent, MouseEvent } from "react";
 import { Header } from "../Header";
 import { useRouter } from "next/router";
 import { Insights } from "../../types/insights";
@@ -27,6 +27,7 @@ import theme from "../../styles/theme/lightThemeOptions";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../utility/firebase.config";
 import usePremiumStatus from "../../../stripe/usePremiumStatus";
+import { UpgradeButton } from "../UpgradeButton";
 
 type TemporaryDrawerProps = {
   handleInsightSelection: (insight: Insights | undefined) => void;
@@ -49,11 +50,11 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
   };
 
   const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    (open: boolean) => (event: KeyboardEvent | MouseEvent) => {
       if (
         event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
+        ((event as KeyboardEvent).key === "Tab" ||
+          (event as KeyboardEvent).key === "Shift")
       ) {
         return;
       }
@@ -164,15 +165,7 @@ const TemporaryDrawer = ({ handleInsightSelection }: TemporaryDrawerProps) => {
               </ListItem>
             ))}
           </List>
-          {!isUserPremium && (
-            <Button
-              href="/pricing"
-              variant="contained"
-              sx={{ my: 1, mx: 1.5, bgcolor: theme.palette.secondary.main }}
-            >
-              Upgrade to premium
-            </Button>
-          )}
+          {!isUserPremium && <UpgradeButton />}
         </Box>
       </Drawer>
       <Header>Dashboard</Header>
