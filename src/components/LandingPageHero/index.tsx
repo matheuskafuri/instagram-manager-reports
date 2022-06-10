@@ -1,11 +1,13 @@
 import React from "react";
-import { Grid, Typography, Button, Box } from "@mui/material";
+import { Grid, Typography, Box, useMediaQuery } from "@mui/material";
 import myteam from "../../../public/assets/images/myteam.jpeg";
 import Image from "next/image";
 import { FacebookButton } from "../SocialLoginButton";
 import theme from "../../styles/theme/lightThemeOptions";
 
 const Hero = () => {
+  const isMobile = useMediaQuery("(max-width: 700px)");
+
   return (
     <Box
       sx={{
@@ -23,14 +25,14 @@ const Hero = () => {
           display: "flex",
           alignItems: "center",
           maxWidth: "1300px",
-          padding: window.innerWidth > 600 ? "2px" : "1rem",
+          padding: isMobile ? "2px" : "1rem",
         }}
       >
         <Grid item xs={12} md={7}>
           <Typography
             variant="h3"
             fontWeight={700}
-            fontSize={window.innerWidth > 600 ? "32px" : "28px"}
+            fontSize={isMobile ? "32px" : "28px"}
             sx={{ paddingBottom: "1rem", color: theme.palette.primary.main }}
           >
             Vamos escalar seu negócio

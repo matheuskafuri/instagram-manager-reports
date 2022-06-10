@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
 
-  return { props: { accessToken } };
+  return { props: {} };
 };
 
 export default Home;

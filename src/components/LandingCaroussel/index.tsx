@@ -5,17 +5,19 @@ import reach from "../../../public/assets/images/reach_example.png";
 import followersPerDay from "../../../public/assets/images/new_followers_chart_example.png";
 import monthFollowers from "../../../public/assets/images/30_days_new_followers_chart_example.png";
 
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import theme from "../../styles/theme/lightThemeOptions";
 
 const LandingCaroussel = () => {
+  const isMobile = useMediaQuery("(max-width: 700px)");
+
   return (
     <div>
       <Typography
         variant="h4"
         fontWeight={700}
-        fontSize={window.innerWidth > 600 ? "32px" : "28px"}
+        fontSize={isMobile ? "32px" : "28px"}
         sx={{
           paddingBottom: "1rem",
           color: theme.palette.primary.main,
