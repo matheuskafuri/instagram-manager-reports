@@ -1,21 +1,18 @@
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import { InsightsContextProvider } from "../context/insights";
 import { AuthProvider } from "../context/auth";
 import { SearchContextProvider } from "../context/search";
 import { AccountsContextProvider } from "../context/accounts";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 
 import createEmotionCache from "../utility/createEmotionCache";
 import lightThemeOptions from "../styles/theme/lightThemeOptions";
 import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
+import Head from "next/head";
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -34,6 +31,12 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
         <InsightsContextProvider>
           <SearchContextProvider>
             <CacheProvider value={emotionCache}>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="initial-scale=1, width=device-width"
+                />
+              </Head>
               <ThemeProvider theme={lightTheme}>
                 <CssBaseline />
                 <Component {...pageProps} />

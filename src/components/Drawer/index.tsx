@@ -5,7 +5,6 @@ import { Insights } from "../../types/insights";
 import { useInsightsContext } from "../../context/insights";
 import {
   Box,
-  Button,
   Divider,
   Drawer,
   List,

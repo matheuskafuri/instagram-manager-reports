@@ -9,7 +9,7 @@ import { Box, Grid, Typography, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import theme from "../../styles/theme/lightThemeOptions";
 
-const LandingCaroussel = () => {
+const LandingCarousel = () => {
   const isMobile = useMediaQuery("(max-width: 700px)");
 
   return (
@@ -134,4 +134,4 @@ const LandingCaroussel = () => {
   );
 };
 
-export { LandingCaroussel };
+export { LandingCarousel };
