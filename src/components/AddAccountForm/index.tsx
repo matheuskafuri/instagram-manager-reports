@@ -21,7 +21,6 @@ import HighlightOffTwoToneIcon from "@mui/icons-material/HighlightOffTwoTone";
 import fireBaseApi from "../../services/fireBaseApi";
 import { useAuthContext } from "../../context/auth";
 import theme from "../../styles/theme/lightThemeOptions";
-import { Loader } from "../Loader";
 import { useAccountsContext } from "../../context/accounts";
 
 export interface Account {

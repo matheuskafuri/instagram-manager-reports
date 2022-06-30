@@ -47,7 +47,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const signInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
     provider.addScope(
-      "public_profile,user_friends,user_posts,email,read_insights,pages_show_list,business_management,instagram_basic,instagram_manage_insights,pages_read_engagement"
+      // "public_profile,user_friends,user_posts,email,read_insights,pages_show_list,business_management,instagram_basic,instagram_manage_insights,pages_read_engagement"
+      "pages_read_engagement,pages_show_list,instagram_basic,email,public_profile"
     );
 
     signInWithPopup(auth, provider)
